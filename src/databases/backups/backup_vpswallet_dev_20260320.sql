@@ -1,0 +1,79 @@
+RAGMA defer_foreign_keys=TRUE;
+CREATE TABLE tbl__User (
+    Email TEXT PRIMARY KEY,
+    Pass TEXT NOT NULL,
+    PassVer INTEGER NOT NULL,
+    Phone INTEGER NOT NULL,
+    Name TEXT NOT NULL,
+    Avatar TEXT,
+    Status INTEGER NOT NULL,
+    AuthOTP TEXT
+, `Role` integer DEFAULT 0 NOT NULL);
+INSERT INTO "tbl__User" VALUES('nguyenhohoangvy@gmail.com','$2b$10$lZ.m7l67a/dCx48/Fdeqf.c0iry..KGa5p2TQE4bQ4HpXX3SqTz6m',0,355653400,'Nguyễn Hồ Hoàng Vỹ','VPSWallet/avatar/1767079293483',1001,NULL,90001);
+CREATE TABLE tbl__VPSCategory (
+    ID INTEGER PRIMARY KEY,
+    Name TEXT NOT NULL,
+    SupplierID INTEGER NOT NULL
+);
+INSERT INTO "tbl__VPSCategory" VALUES(1,'__Mr.V__s',1);
+INSERT INTO "tbl__VPSCategory" VALUES(1768364143921,'Name',1768444979515);
+INSERT INTO "tbl__VPSCategory" VALUES(1768364176773,'Name',1);
+INSERT INTO "tbl__VPSCategory" VALUES(1768447181603,'qeqeq',1);
+INSERT INTO "tbl__VPSCategory" VALUES(1768447210268,'3131',1);
+INSERT INTO "tbl__VPSCategory" VALUES(1768447223938,'313131',1);
+INSERT INTO "tbl__VPSCategory" VALUES(1768448120359,'12121',1);
+INSERT INTO "tbl__VPSCategory" VALUES(1768448150281,'212121',1);
+INSERT INTO "tbl__VPSCategory" VALUES(1768450030320,'333',1768444979515);
+CREATE TABLE tbl__Supplier (
+    ID INTEGER PRIMARY KEY,
+    Name TEXT NOT NULL,
+    Website TEXT NOT NULL,
+    Phone INTEGER NOT NULL,
+    Email TEXT NOT NULL,
+    Logo TEXT NOT NULL,
+    CountryID INTEGER NOT NULL,
+    Status INTEGER NOT NULL
+);
+INSERT INTO "tbl__Supplier" VALUES(1,'__Mr.V__','Website',1,'Email','Logo',1,1001);
+INSERT INTO "tbl__Supplier" VALUES(1768444979515,'__Mr.V__2','2121',11,'2144','2121',1,1001);
+CREATE TABLE tbl__VPS (
+    ID INTEGER PRIMARY KEY,
+    Name TEXT NOT NULL,
+    CategoryID INTEGER NOT NULL,
+    SupplierID INTEGER NOT NULL,
+    CountryID INTEGER NOT NULL,
+    Core INTEGER NOT NULL,
+    CoreType TEXT,
+    Ram INTEGER NOT NULL,
+    RamType TEXT,
+    Disk INTEGER NOT NULL,
+    DiskType TEXT,
+    PriceMonth INTEGER NOT NULL,
+    Discount TEXT,
+    DataTransfer INTEGER,
+    DomesticBw INTEGER,
+    IntlBwIn INTEGER,
+    IntlBwOut INTEGER,
+    Quantity INTEGER,
+    EndDate INTEGER,
+    IPv4 INTEGER,
+    OS TEXT,
+    IOPS TEXT,
+    Sold INTEGER,
+    TotalComments INTEGER,
+    Content TEXT,
+    Status INTEGER NOT NULL
+);
+INSERT INTO "tbl__VPS" VALUES(1,'CHIP01',1,1,1,1,'CoreType',1,'RamType',1,'DiskType',1,'Discount',1,1,1,1,1,1,1,'OS','IOPS',0,0,'Content',1001);
+INSERT INTO "tbl__VPS" VALUES(2,'CHIP01',1,1,1,1,'CoreType',1,'RamType',1,'DiskType',1,'Discount',1,1,1,1,1,1,1,'OS','IOPS',0,0,'Content',1001);
+INSERT INTO "tbl__VPS" VALUES(1768464990140,'444',1,1,1,4,'44',44,'44',44,'44',44,'44',44,44,44,44,44,44,44,'44','44',NULL,NULL,NULL,1001);
+INSERT INTO "tbl__VPS" VALUES(1768465262217,'22',22,22,1,22,'2',22,'2',22,'22',22,'2',22,22,2,22,22,22,22,'22','2',NULL,NULL,NULL,1001);
+INSERT INTO "tbl__VPS" VALUES(1768467289735,'3333',1,1768444979515,1,3,'33',3,'3',3,'3',3,'3',3,NULL,3,3,3,3,3,'3','3',NULL,NULL,NULL,2001);
+CREATE TABLE d1_migrations(
+		id         INTEGER PRIMARY KEY AUTOINCREMENT,
+		name       TEXT UNIQUE,
+		applied_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+INSERT INTO "d1_migrations" VALUES(1,'0001_naive_phil_sheldon.sql','2026-01-16 08:03:39');
+DELETE FROM sqlite_sequence;
+INSERT INTO "sqlite_sequence" VALUES('d1_migrations',1);

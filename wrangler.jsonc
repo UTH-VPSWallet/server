@@ -16,6 +16,14 @@
 	},
 	"compatibility_flags": [
 		"nodejs_compat"
+	],
+	"d1_databases": [
+		{
+			"binding": "DB_UTH_VPSWallet_DEV",
+			"database_name": "DB__UTH_VPSWallet_DEV",
+			"database_id": "2016cba8-8517-4791-97f6-6f99497b71a0",
+			"remote": true
+		}
 	]
 	/**
 	 * Smart Placement
