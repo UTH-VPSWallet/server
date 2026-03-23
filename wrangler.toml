@@ -1,0 +1,39 @@
+name = "server-dev"
+main = "src/index.ts"
+compatibility_date = "2026-03-23"
+observability = true
+
+# ⚙️ Default environment (local/dev)
+[[d1_databases]]
+binding = "DB"
+database_name = "DB__UTH_VPSWallet_DEV"
+database_id = "2016cba8-8517-4791-97f6-6f99497b71a0"
+
+[[r2_buckets]]
+binding = "BK"
+bucket_name = "bk-uth-vpswallet-dev"
+preview_bucket_name = "bk-uth-vpswallet-dev"
+
+[vars]
+ENVIRONMENT = "dev"
+R2_PUBLIC_URL_BASE = "https://pub-c2ce07042e73461da34b169299bc0db1.r2.dev"
+JWT_SECRET = "UTH_VPSWALLET_DEV_SECRET"
+
+# 🧩 Environment: Development
+[env.dev]
+name = "server-dev"
+
+[[env.dev.d1_databases]]
+binding = "DB"
+database_name = "DB__UTH_VPSWallet_DEV"
+database_id = "2016cba8-8517-4791-97f6-6f99497b71a0"
+
+[[env.dev.r2_buckets]]
+binding = "BK"
+bucket_name = "bk-uth-vpswallet-dev"
+preview_bucket_name = "bk-uth-vpswallet-dev"
+
+[env.dev.vars]
+ENVIRONMENT = "dev"
+R2_PUBLIC_URL_BASE = "https://pub-c2ce07042e73461da34b169299bc0db1.r2.dev"
+JWT_SECRET = "UTH_VPSWALLET_DEV_SECRET"
