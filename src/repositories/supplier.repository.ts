@@ -23,7 +23,7 @@ export class SupplierRepository {
       }
       const checkPass = await bcrypt.compare(req.Pass, user.Pass);
       if(!checkPass){
-        res.Status = 5001;
+        res.Status = 5002;
         res.Message = SUPPLIER.RES_5002;
         return res;
       }
