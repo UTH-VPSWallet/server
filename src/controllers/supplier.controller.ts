@@ -17,8 +17,6 @@ const withService = async (c: any, handler: (service: SupplierService) => Promis
   try {
     const repo = new SupplierRepository(c.env.DB);
     const service = new SupplierService(repo, c.env.JWT_SECRET);
-    console.log("c.env.DB", c.env.DB)
-    console.log("c.env.JWT_SECRET", c.env.JWT_SECRET)
     const data = await handler(service);
     return c.json(data)
   } catch (err) {
