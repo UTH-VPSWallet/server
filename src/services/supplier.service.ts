@@ -1,37 +1,38 @@
 import { SupplierRepository } from '../repositories/supplier.repository';
-import { SupplierLoginReq, SupplierLoginRes} from '../dtos/supplier.dto';
+import { SelectUserByEmailPassReq, SelectUserEmailPassRes, SupplierLoginReq, SupplierLoginRes} from '../dtos/supplier.dto';
 import { ResData } from '../dtos/res.dto';
 import { generateJWT } from '../utils/jwt.util';
+import { CONSTANTS } from '../constants/text.constant';
 
 
 export class  SupplierService {
   
   constructor(
-    private repo:  SupplierRepository,
+    private repo: SupplierRepository,
     private jwtSecret: string,
   ) {}
 
-    async SupplierLogin(supplierLoginReq: SupplierLoginReq): Promise<ResData<SupplierLoginRes>> {
-        const supplier = await this.repo.SupplierLogin(supplierLoginReq);
+    async SupplierLogin(req: SupplierLoginReq): Promise<ResData<SupplierLoginRes>> {
         let res = new ResData<SupplierLoginRes>();
-        if(!supplier){
-            res.Status = 0;
-            res.Message = 'Tài Khoản hoặc Mật Khẩu không đúng';
-            return res;
+        const selectUserByEmailPassReq: SelectUserByEmailPassReq = {
+            Email: req.Email,
+            Pass: req.Pass
         }
-        if(supplier!.Status != 1){
-            res.Status = -1;
-            res.Message = 'Tài khoản hiện đang không hoạt động';
-            return res;
-        }
-        const token = await generateJWT({ Email: supplier.Email, date: new Date() },
-            this.jwtSecret,
-            3600
+        const user = await this.repo.SelectSupplierByEmailPass(selectUserByEmailPassReq) as ResData<SelectUserEmailPassRes>;
+        res.Status = user.Status;
+        res.Message = user.Message;
+        if(user.Status !== 1001) return res;
+        const jwtSecret = CONSTANTS.JWTSECRET;
+        const token = await generateJWT(
+            { 
+                Email: user.Data.Email,
+                date: new Date()
+            },
+            jwtSecret,
+            3600 * 24 * 365
         );
-        res.Status = 1;
-        res.Message = 'Đăng nhập thành công';
         res.Data = {
-            Name: supplier.Name,
+            ...user.Data,
             Token: token
         }
         return res;
