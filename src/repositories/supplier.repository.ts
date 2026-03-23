@@ -15,13 +15,13 @@ export class SupplierRepository {
     const orm = drizzle(this.db);
     let res = new ResData<SelectUserEmailPassRes>();
     try{
-      const [user] = await orm.select().from(SupplierEntity).where(eq(SupplierEntity.Email, req.Email)).limit(1);
+      const [user] = await orm.select().from(SupplierEntity).where(eq(SupplierEntity.Email, req.email)).limit(1);
       if(!user){
         res.Status = 5001;
         res.Message = SUPPLIER.RES_5001;
         return res;
       }
-      const checkPass = await bcrypt.compare(req.Pass, user.Pass);
+      const checkPass = await bcrypt.compare(req.pass, user.Pass);
       if(!checkPass){
         res.Status = 5002;
         res.Message = SUPPLIER.RES_5002;

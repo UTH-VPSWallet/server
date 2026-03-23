@@ -15,8 +15,8 @@ export class  SupplierService {
     async SupplierLogin(req: SupplierLoginReq): Promise<ResData<SupplierLoginRes>> {
         let res = new ResData<SupplierLoginRes>();
         const selectUserByEmailPassReq: SelectUserByEmailPassReq = {
-            Email: req.Email,
-            Pass: req.Pass
+            email: req.email,
+            pass: req.pass
         }
         const user = await this.repo.SelectSupplierByEmailPass(selectUserByEmailPassReq) as ResData<SelectUserEmailPassRes>;
         res.Status = user.Status;

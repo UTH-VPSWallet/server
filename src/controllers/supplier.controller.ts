@@ -16,12 +16,12 @@ SupplierController.post('/login', async (c) =>{
     res.Message = ERRORS.ERROR_4000;
     return c.json(res);
   }
-  if(!req.Email){
+  if(!req.email){
     res.Status = 4001;
     res.Message = SUPPLIER.ERROR_4001;
     return c.json(res);
   }
-  if(!req.Pass){
+  if(!req.pass){
     res.Status = 4002;
     res.Message = SUPPLIER.ERROR_4002;
     return c.json(res);
