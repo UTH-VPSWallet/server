@@ -7,4 +7,4 @@ CREATE TABLE IF NOT EXISTS tbl__Customer (
 );
 --Customer Value
 INSERT INTO tbl__Customer (Email, Pass, Name, Status)
-VALUES (vy@gmail.com, 1111, Vỹ, 1);
+VALUES ('vy@gmail.com', 1111, 'Vỹ', 1);

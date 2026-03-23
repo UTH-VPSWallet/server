@@ -7,4 +7,4 @@ CREATE TABLE IF NOT EXISTS tbl__Supplier (
 );
 --Supplier Value
 INSERT INTO tbl__Supplier (Email, Pass, Name, Status)
-VALUES (nhanhoa@gmail.com, 1111, Nhân Hòa, 1);
+VALUES ('nhanhoa@gmail.com', 1111, 'Nhân Hòa', 1);
