@@ -33,3 +33,9 @@ export const SUPPLIER = {
     RES_5003: 'Tài khoản đang bị khóa',
     RES_5004: 'Tài khoản chưa kích hoạt',
 }
+export const CATEGORY = {
+    RES_6001: 'Category không tồn tại',
+    RES_6002: 'Không có quyền chỉnh sửa category này',
+    RES_6003: 'Bắt buộc nhập tên category',
+    RES_6004: 'Thiếu ID category',
+}
