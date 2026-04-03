@@ -60,8 +60,8 @@ export class CategoryRepository {
                 Status: 1
             }).returning({ insertedId: CategoryEntity.ID });
 
-            res.Status = 1001;
-            res.Message = SUCCESS.SUCCESS_1001;
+            res.Status = 1002;
+            res.Message = SUCCESS.SUCCESS_1002;
             res.Data = { ID: result[0].insertedId };
             return res;
         } catch {
@@ -92,8 +92,8 @@ export class CategoryRepository {
                 Status: req.Status ?? existing.Status
             }).where(eq(CategoryEntity.ID, req.ID));
 
-            res.Status = 1001;
-            res.Message = SUCCESS.SUCCESS_1001;
+            res.Status = 1003;
+            res.Message = SUCCESS.SUCCESS_1003;
             return res;
         } catch {
             res.Status = 3000;
