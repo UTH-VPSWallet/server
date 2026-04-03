@@ -39,3 +39,6 @@ export const CATEGORY = {
     RES_6003: 'Bắt buộc nhập tên category',
     RES_6004: 'Thiếu ID category',
 }
+export const VPS = {
+    RES_7001: 'VPS không tồn tại'
+}
