@@ -21,3 +21,9 @@ export interface GetAllRes {
     Location : string;
     Status: number;
 }[]
+
+export interface CreateReq {
+    Email: string;
+    Name: string;
+    Location : string;
+}
