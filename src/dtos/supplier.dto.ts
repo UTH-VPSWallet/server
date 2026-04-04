@@ -27,3 +27,10 @@ export interface CreateReq {
     Name: string;
     Location : string;
 }
+
+export interface UpdateReq {
+    Email: string;
+    Name: string;
+    Location : string;
+    Status : number;
+}

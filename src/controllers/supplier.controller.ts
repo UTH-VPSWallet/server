@@ -1,5 +1,5 @@
 import { Hono } from 'hono'
-import { CreateReq, SupplierLoginReq } from '../dtos/supplier.dto'
+import { CreateReq, SupplierLoginReq, UpdateReq } from '../dtos/supplier.dto'
 import { SupplierService } from '../services/supplier.service'
 import {SupplierRepository } from '../repositories/supplier.repository'
 import { Res } from '../dtos/res.dto'
@@ -65,6 +65,31 @@ SupplierController.post('/create', async (c) => {
     const repo = new SupplierRepository(c.env.DB);
     const service = new SupplierService(repo,c.env.JWT_SECRET);
     const result = await service.Create(req);
+    
+    return c.json(result);
+});
+
+SupplierController.post('/update', async (c) => {
+    let req = null;
+    let res = new Res();
+
+    try {
+        req = await c.req.json<UpdateReq>();
+    } catch {
+        res.Status = 4000;
+        res.Message = ERRORS.ERROR_4000;
+        return c.json(res);
+    }
+
+    if (!req.Email) {
+        res.Status = 5003;
+        res.Message = "Bắt buộc phải nhập email"
+        return c.json(res);
+    }
+
+    const repo = new SupplierRepository(c.env.DB);
+    const service = new SupplierService(repo,c.env.JWT_SECRET);
+    const result = await service.Update(req);
     
     return c.json(result);
 });
