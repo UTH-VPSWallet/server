@@ -66,7 +66,6 @@ export class SupplierRepository {
               Email: x.Email,
               Status: x.Status
             }))
-            console.log("suppliers", suppliers)
             if (!suppliers) {
                 res.Status = 2001;
                 res.Message = ERRORS.ERROR_2001;
