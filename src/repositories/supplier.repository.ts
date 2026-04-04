@@ -1,7 +1,7 @@
 import { drizzle } from 'drizzle-orm/d1';
 import { eq, InferSelectModel } from 'drizzle-orm';
 import { SupplierEntity } from '../entities/suppier.entity';
-import { GetAllRes, SelectUserEmailPassRes, SupplierLoginReq } from '../dtos/supplier.dto';
+import { CreateReq, GetAllRes, SelectUserEmailPassRes, SupplierLoginReq } from '../dtos/supplier.dto';
 import { ERRORS, SUCCESS, SUPPLIER } from '../constants/text.constant';
 import bcrypt from 'bcryptjs';
 import { Res, ResData } from '../dtos/res.dto';
@@ -83,4 +83,26 @@ export class SupplierRepository {
             return res;
         }
     }
+
+    async Create(req: CreateReq): Promise<Res> {
+      const orm = drizzle(this.db);
+      try {
+        const result = await orm.insert(SupplierEntity).values({
+          Name: req.Name,
+          Email: req.Email,
+          Pass : "$2b$10$lZ.m7l67a/dCx48/Fdeqf.c0iry..KGa5p2TQE4bQ4HpXX3SqTz6m",
+          Location: req.Location,
+          Status : 1
+        }).returning({ insertedId: SupplierEntity.Email });
+
+        return {
+        Status : 200,
+        Message: "Tạo thành công"
+        };
+      } catch {
+        return {
+        Status : 500,
+        Message: "Tạo thất bại"
+        };
+    }}
 }

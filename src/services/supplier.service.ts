@@ -1,6 +1,6 @@
 import { SupplierRepository } from '../repositories/supplier.repository';
-import { GetAllRes, SelectUserByEmailPassReq, SelectUserEmailPassRes, SupplierLoginReq, SupplierLoginRes} from '../dtos/supplier.dto';
-import { ResData } from '../dtos/res.dto';
+import { CreateReq, GetAllRes, SelectUserByEmailPassReq, SelectUserEmailPassRes, SupplierLoginReq, SupplierLoginRes} from '../dtos/supplier.dto';
+import { Res, ResData } from '../dtos/res.dto';
 import { generateJWT } from '../utils/jwt.util';
 import { CONSTANTS } from '../constants/text.constant';
 
@@ -12,7 +12,7 @@ export class  SupplierService {
     private jwtSecret: string,
   ) {}
 
-    async SupplierLogin(req: SupplierLoginReq): Promise<ResData<SupplierLoginRes>> {
+    async Login(req: SupplierLoginReq): Promise<ResData<SupplierLoginRes>> {
         let res = new ResData<SupplierLoginRes>();
         const selectUserByEmailPassReq: SelectUserByEmailPassReq = {
             email: req.email,
@@ -38,7 +38,12 @@ export class  SupplierService {
         return res;
     }
 
-    async SupplierGetAlls(): Promise<ResData<GetAllRes[]>> {
+    async GetAll(): Promise<ResData<GetAllRes[]>> {
         return await this.repo.GetAll();
     }
+
+    async Create(req: CreateReq): Promise<Res> {
+        return await this.repo.Create(req);
+    }
 }
+
