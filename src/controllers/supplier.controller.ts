@@ -40,3 +40,6 @@ const withService = async (c: any, handler: (service: SupplierService) => Promis
     return c.json({ TrangThai: 500, ThongBao: 'Lỗi đầu vào!' })
   }
 }
+
+
+SupplierController.post('/supplier/getall', async (c) => withService(c, service => service.SupplierGetAlls()))

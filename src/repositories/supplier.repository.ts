@@ -1,7 +1,7 @@
 import { drizzle } from 'drizzle-orm/d1';
 import { eq, InferSelectModel } from 'drizzle-orm';
 import { SupplierEntity } from '../entities/suppier.entity';
-import { SelectUserEmailPassRes, SupplierLoginReq } from '../dtos/supplier.dto';
+import { GetAllRes, SelectUserEmailPassRes, SupplierLoginReq } from '../dtos/supplier.dto';
 import { ERRORS, SUCCESS, SUPPLIER } from '../constants/text.constant';
 import bcrypt from 'bcryptjs';
 import { Res, ResData } from '../dtos/res.dto';
@@ -56,4 +56,26 @@ export class SupplierRepository {
       return res;
     }
   }
+  async GetAll(): Promise<ResData<GetAllRes[]>> {
+        const orm = drizzle(this.db);
+        let res = new ResData<GetAllRes[]>();
+        try {
+            const suppliers = await orm.select().from(SupplierEntity)
+
+            if (!suppliers) {
+                res.Status = 2001;
+                res.Message = ERRORS.ERROR_2001;
+                return res;
+            }
+
+            res.Status = 1001;
+            res.Message = SUCCESS.SUCCESS_1001;
+            res.Data = suppliers;
+            return res;
+        } catch {
+            res.Status = 3000;
+            res.Message = ERRORS.ERROR_3000;
+            return res;
+        }
+    }
 }

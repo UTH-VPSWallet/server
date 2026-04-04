@@ -1,5 +1,5 @@
 import { SupplierRepository } from '../repositories/supplier.repository';
-import { SelectUserByEmailPassReq, SelectUserEmailPassRes, SupplierLoginReq, SupplierLoginRes} from '../dtos/supplier.dto';
+import { GetAllRes, SelectUserByEmailPassReq, SelectUserEmailPassRes, SupplierLoginReq, SupplierLoginRes} from '../dtos/supplier.dto';
 import { ResData } from '../dtos/res.dto';
 import { generateJWT } from '../utils/jwt.util';
 import { CONSTANTS } from '../constants/text.constant';
@@ -36,5 +36,9 @@ export class  SupplierService {
             Token: token
         }
         return res;
+    }
+
+    async SupplierGetAlls(): Promise<ResData<GetAllRes[]>> {
+        return await this.repo.GetAll();
     }
 }
