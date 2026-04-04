@@ -94,7 +94,7 @@ SupplierController.put('/update', async (c) => {
     return c.json(result);
 });
 
-SupplierController.get('/get-by-email/:email', async (c) => {
+SupplierController.get('/get-by-email', async (c) => {
     let req = null;
     let res = new ResData<SupplierRes>();
 
