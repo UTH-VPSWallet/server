@@ -34,3 +34,10 @@ export interface UpdateReq {
     Location : string;
     Status : number;
 }
+
+export interface SupplierRes {
+    Email: string;
+    Name: string;
+    Location : string;
+    Status : number;
+}

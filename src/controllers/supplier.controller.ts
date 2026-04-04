@@ -1,8 +1,8 @@
 import { Hono } from 'hono'
-import { CreateReq, SupplierLoginReq, UpdateReq } from '../dtos/supplier.dto'
+import { CreateReq, SupplierLoginReq, SupplierRes, UpdateReq } from '../dtos/supplier.dto'
 import { SupplierService } from '../services/supplier.service'
 import {SupplierRepository } from '../repositories/supplier.repository'
-import { Res } from '../dtos/res.dto'
+import { Res, ResData } from '../dtos/res.dto'
 import { ERRORS, SUPPLIER } from '../constants/text.constant'
 
 export const SupplierController = new Hono<{ Bindings: { DB: D1Database, JWT_SECRET: string } }>()
@@ -69,7 +69,7 @@ SupplierController.post('/create', async (c) => {
     return c.json(result);
 });
 
-SupplierController.post('/update', async (c) => {
+SupplierController.put('/update', async (c) => {
     let req = null;
     let res = new Res();
 
@@ -90,6 +90,31 @@ SupplierController.post('/update', async (c) => {
     const repo = new SupplierRepository(c.env.DB);
     const service = new SupplierService(repo,c.env.JWT_SECRET);
     const result = await service.Update(req);
+    
+    return c.json(result);
+});
+
+SupplierController.get('/get-by-email/:email', async (c) => {
+    let req = null;
+    let res = new ResData<SupplierRes>();
+
+    try {
+        req = await c.req.json<string>();
+    } catch {
+        res.Status = 4000;
+        res.Message = ERRORS.ERROR_4000;
+        return c.json(res);
+    }
+
+    if (!req) {
+        res.Status = 5003;
+        res.Message = "Bắt buộc phải nhập email"
+        return c.json(res);
+    }
+
+    const repo = new SupplierRepository(c.env.DB);
+    const service = new SupplierService(repo,c.env.JWT_SECRET);
+    const result = await service.GetByEmail(req);
     
     return c.json(result);
 });
