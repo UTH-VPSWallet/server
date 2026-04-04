@@ -1,7 +1,7 @@
 import { drizzle } from 'drizzle-orm/d1';
 import { eq, InferSelectModel } from 'drizzle-orm';
 import { SupplierEntity } from '../entities/suppier.entity';
-import { CreateReq, GetAllRes, SelectUserEmailPassRes, SupplierLoginReq } from '../dtos/supplier.dto';
+import { CreateReq, GetAllRes, SelectUserEmailPassRes, SupplierLoginReq, UpdateReq } from '../dtos/supplier.dto';
 import { ERRORS, SUCCESS, SUPPLIER } from '../constants/text.constant';
 import bcrypt from 'bcryptjs';
 import { Res, ResData } from '../dtos/res.dto';
@@ -105,4 +105,33 @@ export class SupplierRepository {
         Message: "Tạo thất bại"
         };
     }}
+
+  async Update(req: UpdateReq): Promise<Res>
+  {
+      const orm = drizzle(this.db);
+      let res = new Res();
+    try {
+
+        const [existing] = await orm.select().from(SupplierEntity).where(eq(SupplierEntity.Email, req.Email)).limit(1);
+        if (!existing) {
+            res.Status = 5001;
+            res.Message = SUPPLIER.RES_5001;
+            return res;
+        }
+
+        await orm.update(SupplierEntity).set({
+            Name: req.Name ?? existing.Name,
+            Location : req.Location ?? existing.Location,
+            Status: req.Status ?? existing.Status
+        }).where(eq(SupplierEntity.Email, req.Email));
+
+        res.Status = 1003;
+        res.Message = SUCCESS.SUCCESS_1003;
+        return res;
+    } catch {
+        res.Status = 3000;
+        res.Message = ERRORS.ERROR_3000;
+        return res;
+    }
+  }
 }
