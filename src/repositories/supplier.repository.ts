@@ -155,7 +155,7 @@ export class SupplierRepository {
       }
       
       res.Status = 1003;
-      res.Message = SUCCESS.SUCCESS_1003;
+      res.Message = SUCCESS.SUCCESS_1001;
       res.Data = resData;
       return res;
     } 
