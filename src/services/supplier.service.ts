@@ -1,5 +1,5 @@
 import { SupplierRepository } from '../repositories/supplier.repository';
-import { CreateReq, GetAllRes, SelectUserByEmailPassReq, SelectUserEmailPassRes, SupplierLoginReq, SupplierLoginRes, UpdateReq} from '../dtos/supplier.dto';
+import { CreateReq, GetAllRes, SelectUserByEmailPassReq, SelectUserEmailPassRes, SupplierLoginReq, SupplierLoginRes, SupplierRes, UpdateReq} from '../dtos/supplier.dto';
 import { Res, ResData } from '../dtos/res.dto';
 import { generateJWT } from '../utils/jwt.util';
 import { CONSTANTS } from '../constants/text.constant';
@@ -48,6 +48,10 @@ export class  SupplierService {
 
     async Update(req: UpdateReq): Promise<Res> {
         return await this.repo.Update(req);
+    }
+
+    async GetByEmail(req: string): Promise<ResData<SupplierRes>> {
+        return await this.repo.GetByEmail(req);
     }
 }
 
