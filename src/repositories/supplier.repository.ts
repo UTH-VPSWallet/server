@@ -60,8 +60,13 @@ export class SupplierRepository {
         const orm = drizzle(this.db);
         let res = new ResData<GetAllRes[]>();
         try {
-            const suppliers: GetAllRes[] = await orm.select().from(SupplierEntity)
-
+            const suppliers = await orm.select().from(SupplierEntity);
+            const resData: GetAllRes[] = suppliers.map(x => ({
+              Name: x.Name,
+              Email: x.Email,
+              Status: x.Status
+            }))
+            console.log("suppliers", suppliers)
             if (!suppliers) {
                 res.Status = 2001;
                 res.Message = ERRORS.ERROR_2001;
@@ -70,7 +75,7 @@ export class SupplierRepository {
 
             res.Status = 1001;
             res.Message = SUCCESS.SUCCESS_1001;
-            res.Data = suppliers;
+            res.Data = resData;
             return res;
         } catch {
             res.Status = 3000;
