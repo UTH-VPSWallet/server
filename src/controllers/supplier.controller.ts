@@ -45,26 +45,26 @@ const withService = async (c: any, handler: (service: SupplierService) => Promis
 SupplierController.get('/get-all', async (c) => withService(c, service => service.GetAll()))
 
 SupplierController.post('/create', async (c) => {
-    let req = null;
-    let res = new Res();
+  let req = null;
+  let res = new Res();
 
-    try {
-        req = await c.req.json<CreateReq>();
-    } catch {
-        res.Status = 4000;
-        res.Message = ERRORS.ERROR_4000;
-        return c.json(res);
-    }
+  try {
+      req = await c.req.json<CreateReq>();
+  } catch {
+      res.Status = 4000;
+      res.Message = ERRORS.ERROR_4000;
+      return c.json(res);
+  }
 
-    if (!req.Email) {
-        res.Status = 6003;
-        res.Message = "Bắt buộc phải nhập email"
-        return c.json(res);
-    }
+  if (!req.Email) {
+      res.Status = 6003;
+      res.Message = "Bắt buộc phải nhập email"
+      return c.json(res);
+  }
 
-    const repo = new SupplierRepository(c.env.DB);
-    const service = new SupplierService(repo,c.env.JWT_SECRET);
-    const result = await service.Create(req);
-    
-    return c.json(result);
+  const repo = new SupplierRepository(c.env.DB);
+  const service = new SupplierService(repo,c.env.JWT_SECRET);
+  const result = await service.Create(req);
+  
+  return c.json(result);
 });

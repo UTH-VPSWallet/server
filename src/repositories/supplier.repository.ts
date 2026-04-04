@@ -57,31 +57,31 @@ export class SupplierRepository {
     }
   }
   async GetAll(): Promise<ResData<GetAllRes[]>> {
-        const orm = drizzle(this.db);
-        let res = new ResData<GetAllRes[]>();
-        try {
-            const suppliers = await orm.select().from(SupplierEntity);
-            const resData: GetAllRes[] = suppliers.map(x => ({
-              Name: x.Name,
-              Email: x.Email,
-              Location :x.Location,
-              Status: x.Status
-            }))
-            if (!suppliers) {
-                res.Status = 2001;
-                res.Message = ERRORS.ERROR_2001;
-                return res;
-            }
-
-            res.Status = 1001;
-            res.Message = SUCCESS.SUCCESS_1001;
-            res.Data = resData;
-            return res;
-        } catch {
-            res.Status = 3000;
-            res.Message = ERRORS.ERROR_3000;
+      const orm = drizzle(this.db);
+      let res = new ResData<GetAllRes[]>();
+      try {
+        const suppliers = await orm.select().from(SupplierEntity);
+        const resData: GetAllRes[] = suppliers.map(x => ({
+          Name: x.Name,
+          Email: x.Email,
+          Location :x.Location,
+          Status: x.Status
+        }))
+        if (!suppliers) {
+            res.Status = 2001;
+            res.Message = ERRORS.ERROR_2001;
             return res;
         }
+
+        res.Status = 1001;
+        res.Message = SUCCESS.SUCCESS_1001;
+        res.Data = resData;
+        return res;
+      } catch {
+        res.Status = 3000;
+        res.Message = ERRORS.ERROR_3000;
+        return res;
+      }
     }
 
     async Create(req: CreateReq): Promise<Res> {
