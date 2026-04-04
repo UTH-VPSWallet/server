@@ -4,5 +4,6 @@ export const SupplierEntity = sqliteTable('tbl__Supplier', {
   Email: text('Email').primaryKey(),
   Pass: text("Pass").notNull(),
   Name: text("Name").notNull(),
+  Location: text("Location").notNull(),
   Status: integer("Status").notNull(),
 });

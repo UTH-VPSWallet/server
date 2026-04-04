@@ -18,5 +18,6 @@ export interface SelectUserEmailPassRes {
 export interface GetAllRes {
     Email: string;
     Name: string;
+    Location : string;
     Status: number;
 }[]
