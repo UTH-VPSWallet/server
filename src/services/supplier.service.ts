@@ -46,7 +46,7 @@ export class  SupplierService {
         return await this.repo.Create(req);
     }
 
-        async Update(req: UpdateReq): Promise<Res> {
+    async Update(req: UpdateReq): Promise<Res> {
         return await this.repo.Update(req);
     }
 }
