@@ -42,4 +42,4 @@ const withService = async (c: any, handler: (service: SupplierService) => Promis
 }
 
 
-SupplierController.get('/getall', async (c) => withService(c, service => service.SupplierGetAlls()))
+SupplierController.get('/get-all', async (c) => withService(c, service => service.SupplierGetAlls()))
