@@ -60,7 +60,7 @@ export class SupplierRepository {
         const orm = drizzle(this.db);
         let res = new ResData<GetAllRes[]>();
         try {
-            const suppliers = await orm.select().from(SupplierEntity)
+            const suppliers: GetAllRes[] = await orm.select().from(SupplierEntity)
 
             if (!suppliers) {
                 res.Status = 2001;
