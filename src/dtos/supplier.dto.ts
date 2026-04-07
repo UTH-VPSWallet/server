@@ -1,6 +1,6 @@
 export interface SupplierLoginReq {
-    email: string;
-    pass: string;
+    Email: string;
+    Pass: string;
 }
 export interface SupplierLoginRes {
     Token: string;

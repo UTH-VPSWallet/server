@@ -16,5 +16,10 @@ export interface GetBySupplierRes {
     ID: number;
     Name: string;
     CategoryID: number;
+    CPU :string;
+    RAM :string;
+    Storage :string;
+    PricePerMonth: number;
     Status: number;
 }
+

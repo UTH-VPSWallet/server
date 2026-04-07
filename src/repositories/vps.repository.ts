@@ -61,6 +61,10 @@ export class VPSRepository {
                     ID: VPSEntity.ID,
                     Name: VPSEntity.Name,
                     CategoryID: VPSEntity.CategoryID,
+                    PricePerMonth: VPSEntity.PricePerMonth,
+                    Storage: VPSEntity.Storage,
+                    RAM: VPSEntity.RAM,
+                    CPU: VPSEntity.CPU,
                     Status: VPSEntity.Status
                 })
                 .from(VPSEntity)
