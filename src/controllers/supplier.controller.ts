@@ -3,7 +3,7 @@ import { CreateReq, SupplierLoginReq, SupplierRes, UpdateReq } from '../dtos/sup
 import { SupplierService } from '../services/supplier.service'
 import {SupplierRepository } from '../repositories/supplier.repository'
 import { Res, ResData } from '../dtos/res.dto'
-import { ERRORS, ERRS, SUPPLIER } from '../constants/text.constant'
+import { ERRORS, SUPPLIER } from '../constants/text.constant'
 import { httpCodes } from '../constants/enum.constant'
 
 export const SupplierController = new Hono<{ Bindings: { DB: D1Database, JWT_SECRET: string } }>()
@@ -13,7 +13,7 @@ export const SupplierController = new Hono<{ Bindings: { DB: D1Database, JWT_SEC
 SupplierController.post('/login', async (c) =>{
   let req = null;
   try { req = await c.req.json<SupplierLoginReq>() }
-  catch { return c.json({ Status: httpCodes.BadRequest, Message: ERRS.BADREQUEST }, httpCodes.BadRequest) }
+  catch { return c.json({ Status: httpCodes.BadRequest, Message: ERRORS.BADREQUEST }, httpCodes.BadRequest) }
   if(!req.Email) return c.json({ Status: httpCodes.BadRequest, Message: SUPPLIER.EMAIL_REQUIRED }, httpCodes.OK)
   if(!req.Pass) return c.json({ Status: httpCodes.BadRequest, Message: SUPPLIER.PWD_REQUIRED }, httpCodes.OK)
   return withService(c, service => service.Login(req));
@@ -103,5 +103,5 @@ const withService = async (c: any, handler: (service: SupplierService) => Promis
     const service = new SupplierService(repo);
     const data = await handler(service);
     return c.json(data)
-  } catch { return c.json({ Status: httpCodes.BadRequest, Message: ERRS.BADREQUEST }, httpCodes.BadRequest) }
+  } catch { return c.json({ Status: httpCodes.BadRequest, Message: ERRORS.BADREQUEST }, httpCodes.BadRequest) }
 }

@@ -3,6 +3,7 @@ import { CreateReq, GetAllRes, SelectUserByEmailPassReq, SelectUserEmailPassRes,
 import { Res, ResData } from '../dtos/res.dto';
 import { generateJWT } from '../utils/jwt.util';
 import { CONSTANTS } from '../constants/text.constant';
+import { httpCodes } from '../constants/enum.constant';
 
 
 export class  SupplierService {
@@ -12,15 +13,8 @@ export class  SupplierService {
   ) {}
 
     async Login(req: SupplierLoginReq): Promise<ResData<SupplierLoginRes>> {
-        let res = new ResData<SupplierLoginRes>();
-        const selectUserByEmailPassReq: SelectUserByEmailPassReq = {
-            email: req.email,
-            pass: req.pass
-        }
-        const user = await this.repo.SelectSupplierByEmailPass(selectUserByEmailPassReq) as ResData<SelectUserEmailPassRes>;
-        res.Status = user.Status;
-        res.Message = user.Message;
-        if(user.Status !== 1001) return res;
+        const user: ResData<SelectUserEmailPassRes> = await this.repo.SelectSupplierByEmailPass(req);
+        if(user.Status !== httpCodes.OK) return {Status: user.Status, Message: user.Message, Data: { Name: '', Token: '' }};
         const jwtSecret = CONSTANTS.JWTSECRET;
         const token = await generateJWT(
             { 
@@ -30,11 +24,7 @@ export class  SupplierService {
             jwtSecret,
             3600 * 24 * 365
         );
-        res.Data = {
-            ...user.Data,
-            Token: token
-        }
-        return res;
+        return {Status: user.Status, Message: user.Message, Data: { Name: user.Data.Name, Token: token }};
     }
 
     async GetAll(): Promise<ResData<GetAllRes[]>> {

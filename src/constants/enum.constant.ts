@@ -9,6 +9,7 @@ export enum httpCodes {
     ServiceUnavailable = 503,
     UnidentifiedError = 999
 }
+
 export enum AdminStatus {
     Enable = 1,
 
@@ -20,6 +21,14 @@ export enum AdminStatus {
     
     EmailRequired = 1001,
     PwdRequired = 1001,
+}
+
+export enum LoginStatusRes {
+    OK = 200,
+    EmailNotExist = 401,
+    PassWrong = 402,
+    Locked = 501,
+    NotActive = 502
 }
 
 export enum DepositStatus {

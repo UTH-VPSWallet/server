@@ -8,14 +8,14 @@ export const CONSTANTS = {
 }
 export const SUCCESS = {
     SUCCESS_1000: 'Hiển thị/Thêm/Sửa/Xóa thành công',
-    SUCCESS_1001: 'Lấy dữ liệu thành công',
+    GET: 'Get data success',
     SUCCESS_1002: 'Thêm thành công',
     SUCCESS_1003: 'Sửa thành công',
     SUCCESS_1004: 'Xóa thành công'
 }
 export const ERRORS = {
     ERROR_2000: 'Hiển thị/Thêm/Sửa/Xóa thất bại',
-    ERROR_2001: 'Lấy dữ liệu thất bại',
+    GET: 'Get data failed',
     ERROR_2002: 'Thêm thất bại',
     ERROR_2003: 'Sửa thất bại',
     ERROR_2004: 'Xóa thất bại',
@@ -23,15 +23,17 @@ export const ERRORS = {
     ERROR_3002: 'Lỗi không xác định',
     ERROR_3003: 'Lỗi kết nối đến google script send email',
     ERROR_3004: 'Lỗi kết nối đến R2',
-    ERROR_4000: 'Đầu vào không hợp lệ'
+    ERROR_4000: 'Đầu vào không hợp lệ',
+    INTERNALSERVERERROR: 'Internal Server Error',
+    BADREQUEST: 'Bad request'
 }
 export const SUPPLIER = {
     EMAIL_REQUIRED: 'Email required',
     PWD_REQUIRED: 'Password required',
-    RES_5001: 'Email không tồn tại',
-    RES_5002: 'Mật khẩu không đúng',
-    RES_5003: 'Tài khoản đang bị khóa',
-    RES_5004: 'Tài khoản chưa kích hoạt',
+    EMAIL_NOT_EXIST: 'Email no exist',
+    PASS_WRONG: 'Password wrong',
+    LOCKED: 'Account locked',
+    NOT_ACTIVE: 'Account not active',
 }
 export const CATEGORY = {
     RES_6001: 'Category không tồn tại',
@@ -41,14 +43,4 @@ export const CATEGORY = {
 }
 export const VPS = {
     RES_7001: 'VPS không tồn tại'
-}
-export const ERRS = {
-    INTERNALSERVERERROR: 'Internal Server Error',
-    BADREQUEST: 'Bad Request',
-    NOTFOUND: 'Not Found',
-    GET: 'Get data failed',
-    ADD: 'Add data failed',
-    EDIT: 'Edit data failed',
-    DELETE: 'Delete data failed',
-    UNIDENTIFIED: 'Unidentified error',
 }

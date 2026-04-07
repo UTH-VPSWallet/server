@@ -5,56 +5,29 @@ import { CreateReq, GetAllRes, SelectUserEmailPassRes, SupplierLoginReq, Supplie
 import { ERRORS, SUCCESS, SUPPLIER } from '../constants/text.constant';
 import bcrypt from 'bcryptjs';
 import { Res, ResData } from '../dtos/res.dto';
+import { httpCodes, LoginStatusRes } from '../constants/enum.constant';
 
 export type SupplierModel = InferSelectModel<typeof SupplierEntity>;
 
 export class SupplierRepository {
   constructor(private db: D1Database) {}
 
-  async SelectSupplierByEmailPass(req: SupplierLoginReq): Promise<Res>{
+  async SelectSupplierByEmailPass(req: SupplierLoginReq): Promise<ResData<SelectUserEmailPassRes>>{
     const orm = drizzle(this.db);
     let res = new ResData<SelectUserEmailPassRes>();
     try{
-      const [user] = await orm.select().from(SupplierEntity).where(eq(SupplierEntity.Email, req.email)).limit(1);
-      if(!user){
-        res.Status = 5001;
-        res.Message = SUPPLIER.RES_5001;
-        return res;
-      }
-      const checkPass = await bcrypt.compare(req.pass, user.Pass);
-      if(!checkPass){
-        res.Status = 5002;
-        res.Message = SUPPLIER.RES_5002;
-        return res;
-      }
-      if(user.Status === 5003){
-        res.Status = 5003;
-        res.Message = SUPPLIER.RES_5003;
-        return res;
-      }
-      if(user.Status === 5004){
-        res.Status = 5004;
-        res.Message = SUPPLIER.RES_5004;
-        return res;
-      }
-      if(user.Status === 1001){
-        res.Status = 1001;
-        res.Message = SUCCESS.SUCCESS_1001;
-        res.Data = {
-          Email: user.Email,
-          Name: user.Name
-        }
-        return res;
-      }
-      res.Status = 2001;
-      res.Message = ERRORS.ERROR_2001;
-      return res;
-    }
-    catch { 
-      res.Status = 3000;
-      res.Message = ERRORS.ERROR_3000;
-      return res;
-    }
+      const [user] = await orm.select().from(SupplierEntity).where(eq(SupplierEntity.Email, req.Email)).limit(1);
+      if(!user) return { Status: LoginStatusRes.EmailNotExist, Message: SUPPLIER.EMAIL_NOT_EXIST, Data: { Name: '' , Email: '' } }
+      const checkPass = await bcrypt.compare(req.Pass, user.Pass);
+      if(!checkPass) return { Status: LoginStatusRes.PassWrong, Message: SUPPLIER.PASS_WRONG, Data: { Name: '' , Email: '' } }
+      if(user.Status === LoginStatusRes.Locked) return { Status: LoginStatusRes.Locked, Message: SUPPLIER.LOCKED, Data: { Name: '' , Email: '' } }
+      if(user.Status === LoginStatusRes.NotActive) return { Status: LoginStatusRes.NotActive, Message: SUPPLIER.NOT_ACTIVE, Data: { Name: '' , Email: '' } }
+      if(user.Status === LoginStatusRes.OK) return { Status: LoginStatusRes.OK, Message: SUCCESS.GET, Data: {
+        Email: user.Email,
+        Name: user.Name
+      }}
+      return{ Status: httpCodes.UnidentifiedError, Message: ERRORS.GET, Data: { Name: '' , Email: '' } };
+    } catch{ return { Status: httpCodes.InternalServerError, Message: ERRORS.INTERNALSERVERERROR, Data: { Name: '' , Email: '' } } }
   }
   async GetAll(): Promise<ResData<GetAllRes[]>> {
         const orm = drizzle(this.db);
@@ -69,12 +42,12 @@ export class SupplierRepository {
             }))
             if (!suppliers) {
                 res.Status = 2001;
-                res.Message = ERRORS.ERROR_2001;
+                res.Message = ERRORS.GET;
                 return res;
             }
 
             res.Status = 1001;
-            res.Message = SUCCESS.SUCCESS_1001;
+            res.Message = SUCCESS.GET;
             res.Data = resData;
             return res;
         } catch {
@@ -115,7 +88,7 @@ export class SupplierRepository {
         const [existing] = await orm.select().from(SupplierEntity).where(eq(SupplierEntity.Email, req.Email)).limit(1);
         if (!existing) {
             res.Status = 5001;
-            res.Message = SUPPLIER.RES_5001;
+            res.Message = SUPPLIER.EMAIL_NOT_EXIST;
             return res;
         }
 
@@ -143,7 +116,7 @@ export class SupplierRepository {
       
       if (!existing) {
           res.Status = 5001;
-          res.Message = SUPPLIER.RES_5001;
+          res.Message = SUPPLIER.EMAIL_NOT_EXIST;
           return res;
       }
 
@@ -155,7 +128,7 @@ export class SupplierRepository {
       }
       
       res.Status = 1003;
-      res.Message = SUCCESS.SUCCESS_1001;
+      res.Message = SUCCESS.GET;
       res.Data = resData;
       return res;
     } 
