@@ -8,8 +8,7 @@ import { CONSTANTS } from '../constants/text.constant';
 export class  SupplierService {
   
   constructor(
-    private repo: SupplierRepository,
-    private jwtSecret: string,
+    private repo: SupplierRepository
   ) {}
 
     async Login(req: SupplierLoginReq): Promise<ResData<SupplierLoginRes>> {

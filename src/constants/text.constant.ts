@@ -26,8 +26,8 @@ export const ERRORS = {
     ERROR_4000: 'Đầu vào không hợp lệ'
 }
 export const SUPPLIER = {
-    ERROR_4001: 'Bắt buộc nhập Email',
-    ERROR_4002: 'Bắt buộc nhập Mật Khẩu',
+    EMAIL_REQUIRED: 'Email required',
+    PWD_REQUIRED: 'Password required',
     RES_5001: 'Email không tồn tại',
     RES_5002: 'Mật khẩu không đúng',
     RES_5003: 'Tài khoản đang bị khóa',
@@ -41,4 +41,14 @@ export const CATEGORY = {
 }
 export const VPS = {
     RES_7001: 'VPS không tồn tại'
+}
+export const ERRS = {
+    INTERNALSERVERERROR: 'Internal Server Error',
+    BADREQUEST: 'Bad Request',
+    NOTFOUND: 'Not Found',
+    GET: 'Get data failed',
+    ADD: 'Add data failed',
+    EDIT: 'Edit data failed',
+    DELETE: 'Delete data failed',
+    UNIDENTIFIED: 'Unidentified error',
 }
