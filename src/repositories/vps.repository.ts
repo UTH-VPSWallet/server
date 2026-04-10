@@ -1,10 +1,9 @@
 import { drizzle } from 'drizzle-orm/d1';
 import { eq, InferSelectModel } from 'drizzle-orm';
-import { VPSEntity } from '../entities/vps.entity';
-import { CategoryEntity } from '../entities/category.entity';
-import { GetByVPSIDRes, GetByCategoryIDRes, GetBySupplierRes, GetBySupplierReq } from '../dtos/vps.dto';
+import { VPSEntity } from '../entities/vps.entity';;
+import { GetByVPSIDRes, GetBySupplierRes, GetBySupplierReq, VPSAddReq } from '../dtos/vps.dto';
 import { ERRORS, SUCCESS } from '../constants/text.constant';
-import { ResData } from '../dtos/res.dto';
+import { Res, ResData } from '../dtos/res.dto';
 import { httpCodes } from '../constants/enum.constant';
 
 export type VPSModel = InferSelectModel<typeof VPSEntity>;
@@ -34,23 +33,6 @@ export class VPSRepository {
             return res;
         }
     }
-
-    async GetByCategoryID(categoryID: number): Promise<ResData<GetByCategoryIDRes[]>> {
-        const orm = drizzle(this.db);
-        let res = new ResData<GetByCategoryIDRes[]>();
-        try {
-            const vpsList = await orm.select().from(VPSEntity).where(eq(VPSEntity.CategoryID, categoryID));
-            
-            res.Status = 1001;
-            res.Message = SUCCESS.GET;
-            res.Data = vpsList;
-            return res;
-        } catch {
-            res.Status = 3000;
-            res.Message = ERRORS.ERROR_3000;
-            return res;
-        }
-    }
     
     async SelectByEmail(req: GetBySupplierReq): Promise<ResData<GetBySupplierRes[]>> {
         const orm = drizzle(this.db);
@@ -71,4 +53,23 @@ export class VPSRepository {
             };
         }  catch{ return { Status: httpCodes.InternalServerError, Message: ERRORS.INTERNALSERVERERROR, Data: [] }}
     }
+    
+    async Create(req: VPSAddReq): Promise<Res> {
+      const orm = drizzle(this.db);
+      try {
+        const result = await orm.insert(VPSEntity).values({
+            ID:  Date.now(),
+            Name: req.Name,
+            CPU: req.CPU,
+            RAM: req.RAM,
+            Storage: req.Storage,
+            PricePerMonth: req.PricePerMonth,
+            Status: req.Status,
+            Email: req.Email,
+        }).returning({ ID: VPSEntity.ID });
+
+        return { Status : httpCodes.OK, Message: SUCCESS.CREATE };
+      } catch{ return { Status: httpCodes.InternalServerError, Message: ERRORS.INTERNALSERVERERROR }}
+    }
+
 }

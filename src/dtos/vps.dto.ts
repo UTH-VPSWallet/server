@@ -1,14 +1,6 @@
 export interface GetByVPSIDRes {
     ID: number;
     Name: string;
-    CategoryID: number;
-    Status: number;
-}
-
-export interface GetByCategoryIDRes {
-    ID: number;
-    Name: string;
-    CategoryID: number;
     Status: number;
 }
 
@@ -24,4 +16,13 @@ export interface GetBySupplierRes {
     PricePerMonth: number;
     Status: number;
 }
-
+export interface VPSAddReq {
+    ID: number;
+    Name: string;
+    CPU :string;
+    RAM :string;
+    Storage :string;
+    PricePerMonth: number;
+    Status: number;
+    Email: string;
+}

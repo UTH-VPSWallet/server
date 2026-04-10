@@ -9,7 +9,7 @@ export const CONSTANTS = {
 export const SUCCESS = {
     SUCCESS_1000: 'Hiển thị/Thêm/Sửa/Xóa thành công',
     GET: 'Get data success',
-    SUCCESS_1002: 'Thêm thành công',
+    CREATE: 'create data success',
     SUCCESS_1003: 'Sửa thành công',
     SUCCESS_1004: 'Xóa thành công'
 }
@@ -42,5 +42,12 @@ export const CATEGORY = {
     RES_6004: 'Thiếu ID category',
 }
 export const VPS = {
-    RES_7001: 'VPS không tồn tại'
+    RES_7001: 'VPS không tồn tại',
+    EMAIL_REQUIRED: 'Email required',
+    NAME_REQUIRED: 'Name required',
+    CPU_REQUIRED: 'CPU required',
+    RAM_REQUIRED: 'RAM required',
+    STRORAGE_REQUIRED: 'Storage required',
+    PRICEMONTH_REQUIRED: 'Price Month required',
+    STATUS_REQUIRED: 'Status required',
 }
