@@ -4,9 +4,7 @@ export interface GetByVPSIDRes {
     Status: number;
 }
 
-export interface GetBySupplierReq {
-    Email: string;
-}
+export interface GetBySupplierReq { Email: string }
 export interface GetBySupplierRes {
     ID: number;
     Name: string;
@@ -34,6 +32,4 @@ export interface VPSUpdateReq {
     PricePerMonth: number;
     Status: number;
 }
-export interface VPSDeleteReq {
-    ID: number;
-}
+export interface VPSDeleteReq { ID: number }
