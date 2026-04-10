@@ -11,14 +11,14 @@ export const SUCCESS = {
     GET: 'Get data success',
     CREATE: 'Create data success',
     UPDATE: 'Update data success',
-    SUCCESS_1004: 'Xóa thành công'
+    DELETE: 'Delete data success'
 }
 export const ERRORS = {
     ERROR_2000: 'Hiển thị/Thêm/Sửa/Xóa thất bại',
     GET: 'Get data failed',
     CREATE: 'Create data failed',
     UPDATE: 'Update data failed',
-    ERROR_2004: 'Xóa thất bại',
+    DELETE: 'Delete data failed',
     ERROR_3000: 'Lỗi kết nối DataBase',
     ERROR_3002: 'Lỗi không xác định',
     ERROR_3003: 'Lỗi kết nối đến google script send email',

@@ -34,3 +34,6 @@ export interface VPSUpdateReq {
     PricePerMonth: number;
     Status: number;
 }
+export interface VPSDeleteReq {
+    ID: number;
+}

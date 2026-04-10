@@ -4,27 +4,10 @@ import { VPSRepository } from '../repositories/vps.repository';
 import { AuthMiddleware } from '../middlewares/auth.middleware';
 import { Res } from '../dtos/res.dto';
 import { ERRORS, SUPPLIER, VPS } from '../constants/text.constant';
-import { GetBySupplierReq, VPSAddReq, VPSUpdateReq } from '../dtos/vps.dto';
+import { GetBySupplierReq, VPSAddReq, VPSDeleteReq, VPSUpdateReq } from '../dtos/vps.dto';
 import { httpCodes } from '../constants/enum.constant';
 
 export const VPSController = new Hono<{ Bindings: { DB: D1Database } }>();
-
-VPSController.get('/:id', async (c) => {
-    const id = parseInt(c.req.param('id'));
-    let res = new Res();
-    
-    if (isNaN(id)) {
-        res.Status = 4000;
-        res.Message = ERRORS.ERROR_4000;
-        return c.json(res);
-    }
-
-    const repo = new VPSRepository(c.env.DB);
-    const service = new VPSService(repo);
-    const result = await service.GetByVPSID(id);
-  
-    return c.json(result);
-});
 
 //------------------------------------------------------------ SUPPLIER ------------------------------------------------------------
 
@@ -36,7 +19,7 @@ VPSController.post('/supplier/get-all', async (c) => {
     return withService(c, service => service.GetBySupplier(req));
 });
 
-VPSController.post('/supplier/create', async (c) => {
+VPSController.post('/supplier/add', async (c) => {
     let req = null;
     try { req = await c.req.json<VPSAddReq>() }
     catch { return c.json({ Status: httpCodes.BadRequest, Message: ERRORS.BADREQUEST }, httpCodes.BadRequest) }
@@ -48,11 +31,11 @@ VPSController.post('/supplier/create', async (c) => {
     if (!req.PricePerMonth)  return c.json({ Status: httpCodes.BadRequest, Message: VPS.PRICEMONTH_REQUIRED });
     const repo = new VPSRepository(c.env.DB);
     const service = new VPSService(repo);
-    const result = await service.Create(req);
+    const result = await service.Add(req);
     return c.json(result);
 });
 
-VPSController.post('/supplier/update', async (c) => {
+VPSController.post('/supplier/edit', async (c) => {
     let req = null;
     try { req = await c.req.json<VPSUpdateReq>() }
     catch { return c.json({ Status: httpCodes.BadRequest, Message: ERRORS.BADREQUEST }, httpCodes.BadRequest) }
@@ -64,7 +47,18 @@ VPSController.post('/supplier/update', async (c) => {
     if (!req.PricePerMonth)  return c.json({ Status: httpCodes.BadRequest, Message: VPS.PRICEMONTH_REQUIRED });
     const repo = new VPSRepository(c.env.DB);
     const service = new VPSService(repo);
-    const result = await service.Update(req);
+    const result = await service.Edit(req);
+    return c.json(result);
+});
+
+VPSController.post('/supplier/remove', async (c) => {
+    let req = null;
+    try { req = await c.req.json<VPSDeleteReq>() }
+    catch { return c.json({ Status: httpCodes.BadRequest, Message: ERRORS.BADREQUEST }, httpCodes.BadRequest) }
+    if (!req.ID)  return c.json({ Status: httpCodes.BadRequest, Message: VPS.ID_REQUIRED });
+    const repo = new VPSRepository(c.env.DB);
+    const service = new VPSService(repo);
+    const result = await service.Remove(req);
     return c.json(result);
 });
 
