@@ -1,5 +1,5 @@
 import { SupplierRepository } from '../repositories/supplier.repository';
-import { CreateReq, GetAllRes, SelectUserByEmailPassReq, SelectUserEmailPassRes, SupplierLoginReq, SupplierLoginRes, SupplierRes, UpdateReq} from '../dtos/supplier.dto';
+import { CreateReq, GetAllRes, SelectUserByEmailPassReq, SelectUserEmailPassRes, SupplierChangePassReq, SupplierLoginReq, SupplierLoginRes, SupplierRes, UpdateReq} from '../dtos/supplier.dto';
 import { Res, ResData } from '../dtos/res.dto';
 import { generateJWT } from '../utils/jwt.util';
 import { CONSTANTS } from '../constants/text.constant';
@@ -24,6 +24,15 @@ export class  SupplierService {
             jwtSecret,
             3600 * 24 * 365
         );
+        return {Status: user.Status, Message: user.Message, Data: { Name: user.Data.Name, Token: token }};
+    }
+    async ChangePass(req: SupplierChangePassReq): Promise<Res> {
+        const supplierLoginReq: SupplierLoginReq = {
+            Email: req.Email,
+            Pass: req.Pass
+        }
+        const user: ResData<SelectUserEmailPassRes> = await this.repo.SelectSupplierByEmailPass(supplierLoginReq);
+        if(user.Status !== httpCodes.OK) return {Status: user.Status, Message: user.Message};
         return {Status: user.Status, Message: user.Message, Data: { Name: user.Data.Name, Token: token }};
     }
 

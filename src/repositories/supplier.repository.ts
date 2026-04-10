@@ -14,7 +14,6 @@ export class SupplierRepository {
 
   async SelectSupplierByEmailPass(req: SupplierLoginReq): Promise<ResData<SelectUserEmailPassRes>>{
     const orm = drizzle(this.db);
-    let res = new ResData<SelectUserEmailPassRes>();
     try{
       const [user] = await orm.select().from(SupplierEntity).where(eq(SupplierEntity.Email, req.Email)).limit(1);
       if(!user) return { Status: LoginStatusRes.EmailNotExist, Message: SUPPLIER.EMAIL_NOT_EXIST, Data: { Name: '' , Email: '' } }
@@ -28,6 +27,12 @@ export class SupplierRepository {
       }}
       return{ Status: httpCodes.UnidentifiedError, Message: ERRORS.GET, Data: { Name: '' , Email: '' } };
     } catch{ return { Status: httpCodes.InternalServerError, Message: ERRORS.INTERNALSERVERERROR, Data: { Name: '' , Email: '' } } }
+  }
+  async UpdatePass(req: any){
+    const orm = drizzle(this.db);
+    const [existing] = await orm.select().from(SupplierEntity).where(eq(SupplierEntity.Email, req.Email)).limit(1);
+    if (!existing) {
+    }
   }
   async GetAll(): Promise<ResData<GetAllRes[]>> {
         const orm = drizzle(this.db);
@@ -55,9 +60,9 @@ export class SupplierRepository {
             res.Message = ERRORS.ERROR_3000;
             return res;
         }
-    }
+  }
 
-    async Create(req: CreateReq): Promise<Res> {
+  async Create(req: CreateReq): Promise<Res> {
       const orm = drizzle(this.db);
       try {
         const result = await orm.insert(SupplierEntity).values({
@@ -77,34 +82,31 @@ export class SupplierRepository {
         Status : 500,
         Message: "Tạo thất bại"
         };
-    }}
+  }}
 
   async Update(req: UpdateReq): Promise<Res>
   {
-      const orm = drizzle(this.db);
-      let res = new Res();
+    const orm = drizzle(this.db);
+    let res = new Res();
     try {
-
-        const [existing] = await orm.select().from(SupplierEntity).where(eq(SupplierEntity.Email, req.Email)).limit(1);
-        if (!existing) {
-            res.Status = 5001;
-            res.Message = SUPPLIER.EMAIL_NOT_EXIST;
-            return res;
-        }
-
-        await orm.update(SupplierEntity).set({
-            Name: req.Name ?? existing.Name,
-            Location : req.Location ?? existing.Location,
-            Status: req.Status ?? existing.Status
-        }).where(eq(SupplierEntity.Email, req.Email));
-
-        res.Status = 1003;
-        res.Message = SUCCESS.SUCCESS_1003;
+      const [existing] = await orm.select().from(SupplierEntity).where(eq(SupplierEntity.Email, req.Email)).limit(1);
+      if (!existing) {
+        res.Status = 5001;
+        res.Message = SUPPLIER.EMAIL_NOT_EXIST;
         return res;
+      }
+      await orm.update(SupplierEntity).set({
+        Name: req.Name ?? existing.Name,
+        Location : req.Location ?? existing.Location,
+        Status: req.Status ?? existing.Status
+      }).where(eq(SupplierEntity.Email, req.Email));
+      res.Status = 1003;
+      res.Message = SUCCESS.SUCCESS_1003;
+      return res;
     } catch {
-        res.Status = 3000;
-        res.Message = ERRORS.ERROR_3000;
-        return res;
+      res.Status = 3000;
+      res.Message = ERRORS.ERROR_3000;
+      return res;
     }
   }
 
