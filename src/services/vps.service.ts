@@ -1,5 +1,5 @@
 import { VPSRepository } from '../repositories/vps.repository';
-import { GetByVPSIDRes, GetBySupplierRes, GetBySupplierReq, VPSAddReq } from '../dtos/vps.dto';
+import { GetByVPSIDRes, GetBySupplierRes, GetBySupplierReq, VPSAddReq, VPSUpdateReq } from '../dtos/vps.dto';
 import { Res, ResData } from '../dtos/res.dto';
 
 export class VPSService {
@@ -15,5 +15,9 @@ export class VPSService {
 
     async Create(req: VPSAddReq): Promise<Res> {
         return await this.repo.Create(req);
+    }
+
+    async Update(req: VPSUpdateReq): Promise<Res> {
+        return await this.repo.Update(req);
     }
 }

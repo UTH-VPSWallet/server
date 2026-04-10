@@ -1,7 +1,7 @@
 import { drizzle } from 'drizzle-orm/d1';
 import { eq, InferSelectModel } from 'drizzle-orm';
 import { VPSEntity } from '../entities/vps.entity';;
-import { GetByVPSIDRes, GetBySupplierRes, GetBySupplierReq, VPSAddReq } from '../dtos/vps.dto';
+import { GetByVPSIDRes, GetBySupplierRes, GetBySupplierReq, VPSAddReq, VPSUpdateReq } from '../dtos/vps.dto';
 import { ERRORS, SUCCESS } from '../constants/text.constant';
 import { Res, ResData } from '../dtos/res.dto';
 import { httpCodes } from '../constants/enum.constant';
@@ -72,4 +72,21 @@ export class VPSRepository {
       } catch{ return { Status: httpCodes.InternalServerError, Message: ERRORS.INTERNALSERVERERROR }}
     }
 
+    async Update(req: VPSUpdateReq): Promise<Res>
+    {
+        const orm = drizzle(this.db);
+        try {
+            const [existing] = await orm.select().from(VPSEntity).where(eq(VPSEntity.ID, req.ID)).limit(1);
+            if (!existing) return { Status: httpCodes.ServiceUnavailable, Message: ERRORS.UPDATE }
+            await orm.update(VPSEntity).set({
+                Name: req.Name ?? existing.Name,
+                CPU: req.CPU ?? existing.CPU,
+                RAM: req.RAM ?? existing.RAM,
+                Storage: req.Storage ?? existing.Storage,
+                PricePerMonth: req.PricePerMonth ?? existing.PricePerMonth,
+                Status: req.Status ?? existing.Status
+            }).where(eq(VPSEntity.ID, req.ID));
+            return { Status: httpCodes.OK, Message: SUCCESS.UPDATE };
+        } catch{ return { Status: httpCodes.InternalServerError, Message: ERRORS.INTERNALSERVERERROR }}
+    }
 }

@@ -25,3 +25,12 @@ export interface VPSAddReq {
     Status: number;
     Email: string;
 }
+export interface VPSUpdateReq {
+    ID: number;
+    Name: string;
+    CPU :string;
+    RAM :string;
+    Storage :string;
+    PricePerMonth: number;
+    Status: number;
+}
