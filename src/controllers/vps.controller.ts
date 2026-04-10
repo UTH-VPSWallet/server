@@ -46,7 +46,6 @@ VPSController.post('/create', async (c) => {
     if (!req.RAM)  return c.json({ Status: httpCodes.BadRequest, Message: VPS.RAM_REQUIRED });
     if (!req.Storage)  return c.json({ Status: httpCodes.BadRequest, Message: VPS.STRORAGE_REQUIRED });
     if (!req.PricePerMonth)  return c.json({ Status: httpCodes.BadRequest, Message: VPS.PRICEMONTH_REQUIRED });
-    if (!req.Status)  return c.json({ Status: httpCodes.BadRequest, Message: VPS.STATUS_REQUIRED });
     const repo = new VPSRepository(c.env.DB);
     const service = new VPSService(repo);
     const result = await service.Create(req);
