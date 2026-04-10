@@ -26,15 +26,15 @@ export class  SupplierService {
         );
         return {Status: user.Status, Message: user.Message, Data: { Name: user.Data.Name, Token: token }};
     }
-    async ChangePass(req: SupplierChangePassReq): Promise<Res> {
-        const supplierLoginReq: SupplierLoginReq = {
-            Email: req.Email,
-            Pass: req.Pass
-        }
-        const user: ResData<SelectUserEmailPassRes> = await this.repo.SelectSupplierByEmailPass(supplierLoginReq);
-        if(user.Status !== httpCodes.OK) return {Status: user.Status, Message: user.Message};
-        return {Status: user.Status, Message: user.Message, Data: { Name: user.Data.Name, Token: token }};
-    }
+    // async ChangePass(req: SupplierChangePassReq): Promise<Res> {
+    //     const supplierLoginReq: SupplierLoginReq = {
+    //         Email: req.Email,
+    //         Pass: req.Pass
+    //     }
+    //     const user: ResData<SelectUserEmailPassRes> = await this.repo.SelectSupplierByEmailPass(supplierLoginReq);
+    //     if(user.Status !== httpCodes.OK) return {Status: user.Status, Message: user.Message};
+    //     return {Status: user.Status, Message: user.Message, Data: { Name: user.Data.Name, Token: token }};
+    // }
 
     async GetAll(): Promise<ResData<GetAllRes[]>> {
         return await this.repo.GetAll();
