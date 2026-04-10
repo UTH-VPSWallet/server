@@ -16,7 +16,7 @@ export const SUCCESS = {
 export const ERRORS = {
     ERROR_2000: 'Hiển thị/Thêm/Sửa/Xóa thất bại',
     GET: 'Get data failed',
-    ERROR_2002: 'Thêm thất bại',
+    CREATE: 'Create data failed',
     ERROR_2003: 'Sửa thất bại',
     ERROR_2004: 'Xóa thất bại',
     ERROR_3000: 'Lỗi kết nối DataBase',

@@ -17,7 +17,6 @@ export interface GetBySupplierRes {
     Status: number;
 }
 export interface VPSAddReq {
-    ID: number;
     Name: string;
     CPU :string;
     RAM :string;

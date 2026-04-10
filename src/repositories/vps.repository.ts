@@ -67,8 +67,8 @@ export class VPSRepository {
             Status: req.Status,
             Email: req.Email,
         }).returning({ ID: VPSEntity.ID });
-
-        return { Status : httpCodes.OK, Message: SUCCESS.CREATE };
+        if(result) return { Status : httpCodes.OK, Message: SUCCESS.CREATE };
+        else return { Status : httpCodes.ServiceUnavailable, Message: ERRORS.CREATE }; 
       } catch{ return { Status: httpCodes.InternalServerError, Message: ERRORS.INTERNALSERVERERROR }}
     }
 
