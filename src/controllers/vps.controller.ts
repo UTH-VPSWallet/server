@@ -45,7 +45,7 @@ VPSController.get('/category/:categoryId', async (c) => {
 
 //------------------------------------------------------------ SUPPLIER ------------------------------------------------------------
 
-VPSController.post('/supplier/get-vps', AuthMiddleware, async (c) => {
+VPSController.post('/supplier/get-all', AuthMiddleware, async (c) => {
     let req = null;
     try { req = await c.req.json<GetBySupplierReq>() }
     catch { return c.json({ Status: httpCodes.BadRequest, Message: ERRORS.BADREQUEST }, httpCodes.BadRequest) }
