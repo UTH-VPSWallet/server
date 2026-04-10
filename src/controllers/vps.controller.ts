@@ -3,7 +3,9 @@ import { VPSService } from '../services/vps.service';
 import { VPSRepository } from '../repositories/vps.repository';
 import { AuthMiddleware } from '../middlewares/auth.middleware';
 import { Res } from '../dtos/res.dto';
-import { ERRORS } from '../constants/text.constant';
+import { ERRORS, SUPPLIER } from '../constants/text.constant';
+import { GetBySupplierReq } from '../dtos/vps.dto';
+import { httpCodes } from '../constants/enum.constant';
 
 export const VPSController = new Hono<{ Bindings: { DB: D1Database } }>();
 
@@ -41,13 +43,24 @@ VPSController.get('/category/:categoryId', async (c) => {
     return c.json(result);
 });
 
-VPSController.get('/supplier/get-vps', AuthMiddleware, async (c) => {
-    const user = c.get('user');
-    const supplierEmail = user.Email;
+//------------------------------------------------------------ SUPPLIER ------------------------------------------------------------
 
+VPSController.post('/supplier/get-vps', AuthMiddleware, async (c) => {
+    let req = null;
+    try { req = await c.req.json<GetBySupplierReq>() }
+    catch { return c.json({ Status: httpCodes.BadRequest, Message: ERRORS.BADREQUEST }, httpCodes.BadRequest) }
+    if(!req.Email) return c.json({ Status: httpCodes.BadRequest, Message: SUPPLIER.EMAIL_REQUIRED }, httpCodes.OK)
+    return withService(c, service => service.GetBySupplier(req));
+});
+
+
+//------------------------------------------------------------ PRIVATE ------------------------------------------------------------
+
+const withService = async (c: any, handler: (service: VPSService) => Promise<Res>) => {
+  try {
     const repo = new VPSRepository(c.env.DB);
     const service = new VPSService(repo);
-    const result = await service.GetBySupplier(supplierEmail);
-  
-    return c.json(result);
-});
+    const data = await handler(service);
+    return c.json(data)
+  } catch { return c.json({ Status: httpCodes.BadRequest, Message: ERRORS.BADREQUEST }, httpCodes.BadRequest) }
+}
