@@ -1,8 +1,7 @@
 import { drizzle } from 'drizzle-orm/d1';
 import { eq, InferSelectModel } from 'drizzle-orm';
 import { VPSEntity } from '../entities/vps.entity';
-import { CategoryEntity } from '../entities/category.entity';
-import { GetByVPSIDRes, GetByCategoryIDRes, GetBySupplierRes } from '../dtos/vps.dto';
+import { GetByVPSIDRes, GetBySupplierRes } from '../dtos/vps.dto';
 import { ERRORS, SUCCESS } from '../constants/text.constant';
 import { ResData } from '../dtos/res.dto';
 
@@ -26,23 +25,6 @@ export class VPSRepository {
             res.Status = 1001;
             res.Message = SUCCESS.SUCCESS_1001;
             res.Data = vps;
-            return res;
-        } catch {
-            res.Status = 3000;
-            res.Message = ERRORS.ERROR_3000;
-            return res;
-        }
-    }
-
-    async GetByCategoryID(categoryID: number): Promise<ResData<GetByCategoryIDRes[]>> {
-        const orm = drizzle(this.db);
-        let res = new ResData<GetByCategoryIDRes[]>();
-        try {
-            const vpsList = await orm.select().from(VPSEntity).where(eq(VPSEntity.CategoryID, categoryID));
-            
-            res.Status = 1001;
-            res.Message = SUCCESS.SUCCESS_1001;
-            res.Data = vpsList;
             return res;
         } catch {
             res.Status = 3000;
