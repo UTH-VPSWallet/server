@@ -1,7 +1,6 @@
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { SupplierController } from './controllers/supplier.controller';
-import { CategoryController } from './controllers/category.controller';
 import { VPSController } from "./controllers/vps.controller";
 import { OrderController } from "./controllers/order.controller";
 
