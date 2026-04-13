@@ -18,7 +18,6 @@ app.use('*', cors({
 }));
 
 app.route('/supplier', SupplierController);
-app.route('/category', CategoryController);
 app.route('/vps', VPSController);
 app.route('/order', OrderController);
 
