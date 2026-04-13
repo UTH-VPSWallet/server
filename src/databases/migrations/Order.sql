@@ -11,4 +11,4 @@ CREATE TABLE IF NOT EXISTS tbl__Order (
 
 -- Order Value
 INSERT INTO tbl__Order (ID, CustomerEmail, VPSID, Status, CreatedAt, UpdatedAt)
-VALUES (1, 'vy@gmail.com', 1, 0, '2026-04-13', '2026-04-13');
+VALUES (1, 'nhanhoa@gmail.com', 1, 0, '2026-04-13', '2026-04-13');
