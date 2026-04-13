@@ -35,12 +35,6 @@ export const SUPPLIER = {
     LOCKED: 'Account locked',
     NOT_ACTIVE: 'Account not active',
 }
-export const CATEGORY = {
-    RES_6001: 'Category không tồn tại',
-    RES_6002: 'Không có quyền chỉnh sửa category này',
-    RES_6003: 'Bắt buộc nhập tên category',
-    RES_6004: 'Thiếu ID category',
-}
 export const VPS = {
     RES_7001: 'VPS không tồn tại',
     ID_REQUIRED: 'ID required',

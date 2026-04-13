@@ -101,7 +101,7 @@ export class SupplierRepository {
         Status: req.Status ?? existing.Status
       }).where(eq(SupplierEntity.Email, req.Email));
       res.Status = 1003;
-      res.Message = SUCCESS.SUCCESS_1003;
+      res.Message = SUCCESS.UPDATE;
       return res;
     } catch {
       res.Status = 3000;
