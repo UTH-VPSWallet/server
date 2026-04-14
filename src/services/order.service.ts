@@ -1,11 +1,11 @@
 import { OrderRepository } from '../repositories/order.repository';
-import { GetOrdersBySupplierReq, OrderCreateReq, OrderUpdateStatusReq } from '../dtos/order.dto';
+import { GetOrdersBySupplierReq, OrderSupplierRes, OrderCreateReq, OrderUpdateStatusReq } from '../dtos/order.dto';
 import { Res, ResData } from '../dtos/res.dto';
 
 export class OrderService {
     constructor(private repo: OrderRepository) {}
 
-    async GetBySupplier(req: GetOrdersBySupplierReq): Promise<ResData<any>> {
+    async GetBySupplier(req: GetOrdersBySupplierReq): Promise<ResData<OrderSupplierRes[]>> {
         return await this.repo.SelectBySupplier(req);
     }
 
