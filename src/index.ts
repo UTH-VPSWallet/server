@@ -3,6 +3,7 @@ import { cors } from "hono/cors";
 import { SupplierController } from './controllers/supplier.controller';
 import { VPSController } from "./controllers/vps.controller";
 import { OrderController } from "./controllers/order.controller";
+import { CustomerController } from "./controllers/customer.controller";
 
 const app = new Hono<{ Bindings: CloudflareBindings }>();
 
@@ -19,5 +20,6 @@ app.use('*', cors({
 app.route('/supplier', SupplierController);
 app.route('/vps', VPSController);
 app.route('/order', OrderController);
+app.route('/customer', CustomerController);
 
 export default app;
