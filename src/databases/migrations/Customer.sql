@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS tbl__Customer;
+
 --Customer Table
 CREATE TABLE IF NOT EXISTS tbl__Customer (
     Email TEXT PRIMARY KEY,
