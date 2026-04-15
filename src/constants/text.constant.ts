@@ -44,6 +44,7 @@ export const CUSTOMER = {
     PWD_REQUIRED: 'Password required',
     NEW_PWD_REQUIRED: 'New Password required',
     PHONE_REQUIRED: 'Phone required',
+    NAME_REQUIRED: 'Email required',
     EMAIL_NOT_EXIST: 'Email not exist',
     EMAIL_PHONE_NOT_MATCH: 'Email or Phone not match',
     PASS_WRONG: 'Password wrong',

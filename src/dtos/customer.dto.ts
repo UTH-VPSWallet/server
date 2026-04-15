@@ -17,3 +17,10 @@ export interface CustomerRes {
   Name: string;
   Status: number;
 }
+
+export interface CustomerAddReq {
+  Email: string;
+  Pass: string;
+  Phone: string;
+  Name: string;
+}

@@ -1,6 +1,6 @@
 import { CustomerRepository } from '../repositories/customer.repository';
-import { CustomerLoginReq, CustomerLoginRes, CustomerRes } from '../dtos/customer.dto';
-import { ResData } from '../dtos/res.dto';
+import { CustomerAddReq, CustomerLoginReq, CustomerLoginRes, CustomerRes } from '../dtos/customer.dto';
+import { Res, ResData } from '../dtos/res.dto';
 import { httpCodes } from '../constants/enum.constant';
 import { CONSTANTS } from '../constants/text.constant';
 import { generateJWT } from '../utils/jwt.util';
@@ -23,6 +23,8 @@ export class CustomerService {
         );
         return {Status: customer.Status, Message: customer.Message, Data: { Name: customer.Data.Name, Token: token }};
     }
+
+    async Add(req: CustomerAddReq): Promise<Res> { return await this.repo.Create(req) }
 
     async GetAll(): Promise<ResData<CustomerRes[]>> {
         return await this.repo.GetAll();

@@ -1,8 +1,8 @@
 import { drizzle } from 'drizzle-orm/d1';
 import { CustomerEntity } from '../entities/customer.entity';
-import { CustomerLoginReq, CustomerRes, SelectCustomerEmailPassRes } from '../dtos/customer.dto';
+import { CustomerAddReq, CustomerLoginReq, CustomerRes, SelectCustomerEmailPassRes } from '../dtos/customer.dto';
 import { CUSTOMER, ERRORS, SUCCESS } from '../constants/text.constant';
-import { ResData } from '../dtos/res.dto';
+import { Res, ResData } from '../dtos/res.dto';
 import { httpCodes, LoginStatusRes } from '../constants/enum.constant';
 import { eq } from 'drizzle-orm';
 import bcrypt from 'bcryptjs';
@@ -25,6 +25,21 @@ export class CustomerRepository {
             }}
             return{ Status: httpCodes.UnidentifiedError, Message: ERRORS.GET, Data: { Name: '' , Email: '' } };
         } catch{ return { Status: httpCodes.InternalServerError, Message: ERRORS.INTERNALSERVERERROR, Data: { Name: '' , Email: '' } } }
+    }
+
+    async Create(req: CustomerAddReq): Promise<Res> {
+        const orm = drizzle(this.db);
+        try {
+        const result = await orm.insert(CustomerEntity).values({
+            Email: req.Email,
+            Name: req.Name,
+            Pass: await bcrypt.hash(req.Pass, 10),
+            Phone: req.Phone,
+            Status: httpCodes.OK
+        }).returning();
+        if(result) return { Status : httpCodes.OK, Message: SUCCESS.CREATE };
+        else return { Status : httpCodes.ServiceUnavailable, Message: ERRORS.CREATE }; 
+        } catch{ return { Status: httpCodes.InternalServerError, Message: ERRORS.INTERNALSERVERERROR }}
     }
 
     async GetAll(): Promise<ResData<CustomerRes[]>> {
