@@ -10,18 +10,18 @@ export class CustomerService {
     constructor(private repo: CustomerRepository) {}
 
     async Login(req: CustomerLoginReq): Promise<ResData<CustomerLoginRes>> {
-        const user = await this.repo.SelectByEmailPass(req);
-        if(user.Status !== httpCodes.OK) return {Status: user.Status, Message: user.Message, Data: { Name: '', Token: '' }};
+        const customer = await this.repo.SelectByEmailPass(req);
+        if(customer.Status !== httpCodes.OK) return {Status: customer.Status, Message: customer.Message, Data: { Name: '', Token: '' }};
         const jwtSecret = CONSTANTS.JWTSECRET;
         const token = await generateJWT(
             { 
-                Email: user.Data.Email,
+                Email: customer.Data.Email,
                 date: new Date()
             },
             jwtSecret,
             3600 * 24 * 365
         );
-        return {Status: user.Status, Message: user.Message, Data: { Name: user.Data.Name, Token: token }};
+        return {Status: customer.Status, Message: customer.Message, Data: { Name: customer.Data.Name, Token: token }};
     }
 
     async GetAll(): Promise<ResData<CustomerRes[]>> {
