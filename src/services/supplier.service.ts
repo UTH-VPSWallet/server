@@ -1,5 +1,5 @@
 import { SupplierRepository } from '../repositories/supplier.repository';
-import { CreateReq, GetAllRes, SelectUserEmailPassRes, SupplierEditPassReq, SupplierLoginReq, SupplierLoginRes, SupplierRes, UpdateReq} from '../dtos/supplier.dto';
+import { CreateReq, GetAllRes, SelectSupplierEmailPassRes, SupplierEditPassReq, SupplierLoginReq, SupplierLoginRes, SupplierRes, UpdatePassSupplierByEmailPhoneReq, UpdatePassSupplierByEmailPhoneRes, UpdateReq} from '../dtos/supplier.dto';
 import { Res, ResData } from '../dtos/res.dto';
 import { generateJWT } from '../utils/jwt.util';
 import { CONSTANTS } from '../constants/text.constant';
@@ -13,7 +13,7 @@ export class  SupplierService {
   ) {}
 
     async Login(req: SupplierLoginReq): Promise<ResData<SupplierLoginRes>> {
-        const user: ResData<SelectUserEmailPassRes> = await this.repo.SelectSupplierByEmailPass(req);
+        const user = await this.repo.SelectByEmailPass(req);
         if(user.Status !== httpCodes.OK) return {Status: user.Status, Message: user.Message, Data: { Name: '', Token: '' }};
         const jwtSecret = CONSTANTS.JWTSECRET;
         const token = await generateJWT(
@@ -28,6 +28,9 @@ export class  SupplierService {
     }
 
     async ChangePass(req: SupplierEditPassReq): Promise<Res> { return await this.repo.UpdatePass(req) }
+
+    async ForgotPass(req: UpdatePassSupplierByEmailPhoneReq): Promise<ResData<UpdatePassSupplierByEmailPhoneRes>> 
+    { return await this.repo.UpdatePassByEmailPhone(req) }
 
     async GetAll(): Promise<ResData<GetAllRes[]>> { return await this.repo.GetAll() }
 

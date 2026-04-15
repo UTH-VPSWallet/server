@@ -24,11 +24,14 @@ export enum AdminStatus {
 }
 
 export enum LoginStatusRes {
-    OK = 200,
     EmailNotExist = 401,
     PassWrong = 402,
     Locked = 501,
     NotActive = 502
+}
+
+export enum FotgotPassStatusRes {
+   EmailPhoneNotMatch = 501,
 }
 
 export enum DepositStatus {

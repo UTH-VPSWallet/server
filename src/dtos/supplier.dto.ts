@@ -11,13 +11,20 @@ export interface SupplierLoginRes {
     Token: string;
     Name: string;
 }
-export interface SelectUserByEmailPassReq { 
-    email: string,
-    pass: string
+export interface SelectSupplierByEmailPassReq { 
+    Email: string,
+    Pass: string
 }
-export interface SelectUserEmailPassRes { 
+export interface SelectSupplierEmailPassRes { 
     Email: string,
     Name: string,
+}
+export interface UpdatePassSupplierByEmailPhoneReq { 
+    Email: string,
+    Phone: string
+}
+export interface UpdatePassSupplierByEmailPhoneRes { 
+    NewPass: string,
 }
 
 export interface GetAllRes {

@@ -1,5 +1,5 @@
 import { Hono } from 'hono'
-import { CreateReq, SupplierEditPassReq, SupplierLoginReq, SupplierRes, UpdateReq } from '../dtos/supplier.dto'
+import { CreateReq, SupplierEditPassReq, SupplierLoginReq, SupplierRes, UpdatePassSupplierByEmailPhoneReq, UpdateReq } from '../dtos/supplier.dto'
 import { SupplierService } from '../services/supplier.service'
 import {SupplierRepository } from '../repositories/supplier.repository'
 import { Res, ResData } from '../dtos/res.dto'
@@ -27,6 +27,15 @@ SupplierController.post('/change-pass', async (c) =>{
   if(!req.Pass) return c.json({ Status: httpCodes.BadRequest, Message: SUPPLIER.PWD_REQUIRED }, httpCodes.OK)
   if(!req.PassNew) return c.json({ Status: httpCodes.BadRequest, Message: SUPPLIER.NEW_PWD_REQUIRED }, httpCodes.OK)
   return withService(c, service => service.ChangePass(req));
+})
+
+SupplierController.post('/forgot-pass', async (c) =>{
+  let req = null;
+  try { req = await c.req.json<UpdatePassSupplierByEmailPhoneReq>() }
+  catch { return c.json({ Status: httpCodes.BadRequest, Message: ERRORS.BADREQUEST }, httpCodes.BadRequest) }
+  if(!req.Email) return c.json({ Status: httpCodes.BadRequest, Message: SUPPLIER.EMAIL_REQUIRED }, httpCodes.OK)
+  if(!req.Phone) return c.json({ Status: httpCodes.BadRequest, Message: SUPPLIER.PHONE_REQUIRED }, httpCodes.OK)
+  return withService(c, service => service.ForgotPass(req));
 })
 
 
