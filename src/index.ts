@@ -4,6 +4,8 @@ import { SupplierController } from './controllers/supplier.controller';
 import { VPSController } from "./controllers/vps.controller";
 import { OrderController } from "./controllers/order.controller";
 import { CustomerController } from "./controllers/customer.controller";
+import { httpCodes } from "./constants/enum.constant";
+import { ERRORS } from "./constants/text.constant";
 
 const app = new Hono<{ Bindings: CloudflareBindings }>();
 
@@ -21,5 +23,5 @@ app.route('/supplier', SupplierController);
 app.route('/vps', VPSController);
 app.route('/order', OrderController);
 app.route('/customer', CustomerController);
-
+app.notFound((c) => c.json({Status: httpCodes.NotFound, Message: ERRORS.NOTFOUND }, httpCodes.NotFound));
 export default app;

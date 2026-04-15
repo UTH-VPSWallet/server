@@ -14,6 +14,9 @@ export const SUCCESS = {
     DELETE: 'Delete data success'
 }
 export const ERRORS = {
+    BADREQUEST: 'Bad request',
+    NOTFOUND: 'Not Found',
+    INTERNALSERVERERROR: 'Internal Server Error',
     ERROR_2000: 'Hiển thị/Thêm/Sửa/Xóa thất bại',
     GET: 'Get data failed',
     CREATE: 'Create data failed',
@@ -23,9 +26,7 @@ export const ERRORS = {
     ERROR_3002: 'Lỗi không xác định',
     ERROR_3003: 'Lỗi kết nối đến google script send email',
     ERROR_3004: 'Lỗi kết nối đến R2',
-    ERROR_4000: 'Đầu vào không hợp lệ',
-    INTERNALSERVERERROR: 'Internal Server Error',
-    BADREQUEST: 'Bad request'
+    ERROR_4000: 'Đầu vào không hợp lệ' 
 }
 export const SUPPLIER = {
     EMAIL_REQUIRED: 'Email required',
