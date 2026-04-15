@@ -8,6 +8,9 @@ import { eq } from 'drizzle-orm';
 import bcrypt from 'bcryptjs';
 
 export class CustomerRepository {
+
+    SALT_ROUNDS: number = 10;
+
     constructor(private db: D1Database) {}
 
     async SelectByEmailPass(req: CustomerLoginReq): Promise<ResData<SelectCustomerEmailPassRes>>{
@@ -29,16 +32,17 @@ export class CustomerRepository {
 
     async Create(req: CustomerAddReq): Promise<Res> {
         const orm = drizzle(this.db);
+        const hashPass = await bcrypt.hash(req.Pass, this.SALT_ROUNDS);
         try {
-        const result = await orm.insert(CustomerEntity).values({
-            Email: req.Email,
-            Name: req.Name,
-            Pass: await bcrypt.hash(req.Pass, 10),
-            Phone: req.Phone,
-            Status: httpCodes.OK
-        }).returning();
-        if(result) return { Status : httpCodes.OK, Message: SUCCESS.CREATE };
-        else return { Status : httpCodes.ServiceUnavailable, Message: ERRORS.CREATE }; 
+            const result = await orm.insert(CustomerEntity).values({
+                Email: req.Email,
+                Name: req.Name,
+                Pass: hashPass,
+                Phone: req.Phone,
+                Status: httpCodes.OK
+            }).returning({ ID: CustomerEntity.Email });
+            if(result) return { Status : httpCodes.OK, Message: SUCCESS.CREATE };
+            else return { Status : httpCodes.ServiceUnavailable, Message: ERRORS.CREATE }; 
         } catch{ return { Status: httpCodes.InternalServerError, Message: ERRORS.INTERNALSERVERERROR }}
     }
 
