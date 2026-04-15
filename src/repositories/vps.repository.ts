@@ -63,7 +63,7 @@ export class VPSRepository {
                 Status: req.Status ?? existing.Status
             }).where(eq(VPSEntity.ID, req.ID));
             if(update) return { Status: httpCodes.OK, Message: SUCCESS.UPDATE };
-            else return { Status: httpCodes.ServiceUnavailable, Message: ERRORS.UPDATE };
+            return { Status: httpCodes.ServiceUnavailable, Message: ERRORS.UPDATE };
         } catch{ return { Status: httpCodes.InternalServerError, Message: ERRORS.INTERNALSERVERERROR }}
     }
 

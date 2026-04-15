@@ -31,6 +31,7 @@ export const ERRORS = {
 export const SUPPLIER = {
     EMAIL_REQUIRED: 'Email required',
     PWD_REQUIRED: 'Password required',
+    NEW_PWD_REQUIRED: 'New Password required',
     EMAIL_NOT_EXIST: 'Email no exist',
     PASS_WRONG: 'Password wrong',
     LOCKED: 'Account locked',

@@ -1,7 +1,7 @@
 import { drizzle } from 'drizzle-orm/d1';
 import { eq, InferSelectModel } from 'drizzle-orm';
 import { SupplierEntity } from '../entities/suppier.entity';
-import { CreateReq, GetAllRes, SelectUserEmailPassRes, SupplierLoginReq, SupplierRes, UpdateReq } from '../dtos/supplier.dto';
+import { CreateReq, GetAllRes, SelectUserEmailPassRes, SupplierEditPassReq, SupplierLoginReq, SupplierRes, UpdateReq } from '../dtos/supplier.dto';
 import { ERRORS, SUCCESS, SUPPLIER } from '../constants/text.constant';
 import bcrypt from 'bcryptjs';
 import { Res, ResData } from '../dtos/res.dto';
@@ -10,6 +10,9 @@ import { httpCodes, LoginStatusRes } from '../constants/enum.constant';
 export type SupplierModel = InferSelectModel<typeof SupplierEntity>;
 
 export class SupplierRepository {
+
+  SALT_ROUNDS: number = 10;
+
   constructor(private db: D1Database) {}
 
   async SelectSupplierByEmailPass(req: SupplierLoginReq): Promise<ResData<SelectUserEmailPassRes>>{
@@ -28,11 +31,18 @@ export class SupplierRepository {
       return{ Status: httpCodes.UnidentifiedError, Message: ERRORS.GET, Data: { Name: '' , Email: '' } };
     } catch{ return { Status: httpCodes.InternalServerError, Message: ERRORS.INTERNALSERVERERROR, Data: { Name: '' , Email: '' } } }
   }
-  async UpdatePass(req: any){
+  async UpdatePass(req: SupplierEditPassReq): Promise<Res> {
     const orm = drizzle(this.db);
-    const [existing] = await orm.select().from(SupplierEntity).where(eq(SupplierEntity.Email, req.Email)).limit(1);
-    if (!existing) {
-    }
+    try{
+      const [existing] = await orm.select().from(SupplierEntity).where(eq(SupplierEntity.Email, req.Email)).limit(1);
+      if (!existing) return { Status: LoginStatusRes.EmailNotExist, Message: SUPPLIER.EMAIL_NOT_EXIST }
+      const checkPass = await bcrypt.compare(req.Pass, existing.Pass);
+      if(!checkPass) return { Status: LoginStatusRes.PassWrong, Message: SUPPLIER.PASS_WRONG }
+      const hashPass = await bcrypt.hash(req.PassNew, this.SALT_ROUNDS);
+      const update = await orm.update(SupplierEntity).set({ Pass: hashPass }).where(eq(SupplierEntity.Email, req.Email));
+      if(update) return { Status: httpCodes.OK, Message: SUCCESS.UPDATE };
+      return { Status: httpCodes.ServiceUnavailable, Message: ERRORS.UPDATE };
+    } catch{ return { Status: httpCodes.InternalServerError, Message: ERRORS.INTERNALSERVERERROR } }
   }
   async GetAll(): Promise<ResData<GetAllRes[]>> {
         const orm = drizzle(this.db);

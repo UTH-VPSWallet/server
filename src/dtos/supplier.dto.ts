@@ -2,7 +2,7 @@ export interface SupplierLoginReq {
     Email: string;
     Pass: string;
 }
-export interface SupplierChangePassReq {
+export interface SupplierEditPassReq {
     Email: string;
     Pass: string;
     PassNew: string;

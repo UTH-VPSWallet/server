@@ -1,5 +1,5 @@
 import { SupplierRepository } from '../repositories/supplier.repository';
-import { CreateReq, GetAllRes, SelectUserByEmailPassReq, SelectUserEmailPassRes, SupplierChangePassReq, SupplierLoginReq, SupplierLoginRes, SupplierRes, UpdateReq} from '../dtos/supplier.dto';
+import { CreateReq, GetAllRes, SelectUserEmailPassRes, SupplierEditPassReq, SupplierLoginReq, SupplierLoginRes, SupplierRes, UpdateReq} from '../dtos/supplier.dto';
 import { Res, ResData } from '../dtos/res.dto';
 import { generateJWT } from '../utils/jwt.util';
 import { CONSTANTS } from '../constants/text.constant';
@@ -26,30 +26,15 @@ export class  SupplierService {
         );
         return {Status: user.Status, Message: user.Message, Data: { Name: user.Data.Name, Token: token }};
     }
-    // async ChangePass(req: SupplierChangePassReq): Promise<Res> {
-    //     const supplierLoginReq: SupplierLoginReq = {
-    //         Email: req.Email,
-    //         Pass: req.Pass
-    //     }
-    //     const user: ResData<SelectUserEmailPassRes> = await this.repo.SelectSupplierByEmailPass(supplierLoginReq);
-    //     if(user.Status !== httpCodes.OK) return {Status: user.Status, Message: user.Message};
-    //     return {Status: user.Status, Message: user.Message, Data: { Name: user.Data.Name, Token: token }};
-    // }
 
-    async GetAll(): Promise<ResData<GetAllRes[]>> {
-        return await this.repo.GetAll();
-    }
+    async ChangePass(req: SupplierEditPassReq): Promise<Res> { return await this.repo.UpdatePass(req) }
 
-    async Create(req: CreateReq): Promise<Res> {
-        return await this.repo.Create(req);
-    }
+    async GetAll(): Promise<ResData<GetAllRes[]>> { return await this.repo.GetAll() }
 
-    async Update(req: UpdateReq): Promise<Res> {
-        return await this.repo.Update(req);
-    }
+    async Create(req: CreateReq): Promise<Res> { return await this.repo.Create(req) }
 
-    async GetByEmail(req: string): Promise<ResData<SupplierRes>> {
-        return await this.repo.GetByEmail(req);
-    }
+    async Update(req: UpdateReq): Promise<Res> { return await this.repo.Update(req) }
+
+    async GetByEmail(req: string): Promise<ResData<SupplierRes>> { return await this.repo.GetByEmail(req) }
 }
 
