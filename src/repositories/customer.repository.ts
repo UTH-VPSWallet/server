@@ -1,12 +1,31 @@
 import { drizzle } from 'drizzle-orm/d1';
 import { CustomerEntity } from '../entities/customer.entity';
-import { CustomerRes } from '../dtos/customer.dto';
-import { ERRORS, SUCCESS } from '../constants/text.constant';
+import { CustomerLoginReq, CustomerRes, SelectCustomerEmailPassRes } from '../dtos/customer.dto';
+import { CUSTOMER, ERRORS, SUCCESS } from '../constants/text.constant';
 import { ResData } from '../dtos/res.dto';
-import { httpCodes } from '../constants/enum.constant';
+import { httpCodes, LoginStatusRes } from '../constants/enum.constant';
+import { eq } from 'drizzle-orm';
+import bcrypt from 'bcryptjs';
 
 export class CustomerRepository {
     constructor(private db: D1Database) {}
+
+    async SelectByEmailPass(req: CustomerLoginReq): Promise<ResData<SelectCustomerEmailPassRes>>{
+        const orm = drizzle(this.db);
+        try{
+            const [customer] = await orm.select().from(CustomerEntity).where(eq(CustomerEntity.Email, req.Email)).limit(1);
+            if(!customer) return { Status: LoginStatusRes.EmailNotExist, Message: CUSTOMER.EMAIL_NOT_EXIST, Data: { Name: '' , Email: '' } }
+            const checkPass = await bcrypt.compare(req.Pass, customer.Pass);
+            if(!checkPass) return { Status: LoginStatusRes.PassWrong, Message: CUSTOMER.PASS_WRONG, Data: { Name: '' , Email: '' } }
+            if(customer.Status === LoginStatusRes.Locked) return { Status: LoginStatusRes.Locked, Message: CUSTOMER.LOCKED, Data: { Name: '' , Email: '' } }
+            if(customer.Status === LoginStatusRes.NotActive) return { Status: LoginStatusRes.NotActive, Message: CUSTOMER.NOT_ACTIVE, Data: { Name: '' , Email: '' } }
+            if(customer.Status === httpCodes.OK) return { Status: httpCodes.OK, Message: SUCCESS.GET, Data: {
+            Email: customer.Email,
+            Name: customer.Name
+            }}
+            return{ Status: httpCodes.UnidentifiedError, Message: ERRORS.GET, Data: { Name: '' , Email: '' } };
+        } catch{ return { Status: httpCodes.InternalServerError, Message: ERRORS.INTERNALSERVERERROR, Data: { Name: '' , Email: '' } } }
+    }
 
     async GetAll(): Promise<ResData<CustomerRes[]>> {
         const orm = drizzle(this.db);

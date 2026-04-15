@@ -39,6 +39,17 @@ export const SUPPLIER = {
     LOCKED: 'Account locked',
     NOT_ACTIVE: 'Account not active',
 }
+export const CUSTOMER = {
+    EMAIL_REQUIRED: 'Email required',
+    PWD_REQUIRED: 'Password required',
+    NEW_PWD_REQUIRED: 'New Password required',
+    PHONE_REQUIRED: 'Phone required',
+    EMAIL_NOT_EXIST: 'Email not exist',
+    EMAIL_PHONE_NOT_MATCH: 'Email or Phone not match',
+    PASS_WRONG: 'Password wrong',
+    LOCKED: 'Account locked',
+    NOT_ACTIVE: 'Account not active',
+}
 export const VPS = {
     RES_7001: 'VPS không tồn tại',
     ID_REQUIRED: 'ID required',
