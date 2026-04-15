@@ -19,7 +19,7 @@ CustomerController.post('/login', async (c) =>{
   return withService(c, service => service.Login(req));
 })
 
-CustomerController.post('/create', async (c) =>{
+CustomerController.post('/add', async (c) =>{
   let req = null;
   try { req = await c.req.json<CustomerAddReq>() }
   catch { return c.json({ Status: httpCodes.BadRequest, Message: ERRORS.BADREQUEST }, httpCodes.BadRequest) }
