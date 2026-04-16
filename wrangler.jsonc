@@ -20,13 +20,8 @@
 	"d1_databases": [
 		{
 			"binding": "DB",
-			"database_name": "server_db"
-		},
-		{
-			"binding": "server_db",
 			"database_name": "server_db",
-			"database_id": "4dd5c48b-f06e-4e3f-b8e6-35a3773f5ee7",
-			"remote": true
+			"database_id": "4dd5c48b-f06e-4e3f-b8e6-35a3773f5ee7"
 		}
 	]
 	/**
