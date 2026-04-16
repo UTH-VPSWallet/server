@@ -1,15 +1,17 @@
 import { drizzle } from 'drizzle-orm/d1';
 import { eq, InferSelectModel } from 'drizzle-orm';
 import { VPSEntity } from '../entities/vps.entity';;
-import { GetBySupplierRes, GetBySupplierReq, VPSAddReq, VPSUpdateReq, VPSDeleteReq } from '../dtos/vps.dto';
+import { GetBySupplierRes, GetBySupplierReq, VPSAddReq, VPSUpdateReq, VPSDeleteReq, VPSGetByStatusRes, VPSGetByIDRes, VPSGetByIDReq } from '../dtos/vps.dto';
 import { ERRORS, SUCCESS } from '../constants/text.constant';
 import { Res, ResData } from '../dtos/res.dto';
-import { httpCodes } from '../constants/enum.constant';
+import { httpCodes, VPSStatus } from '../constants/enum.constant';
 
 export type VPSModel = InferSelectModel<typeof VPSEntity>;
 
 export class VPSRepository {
+
     constructor(private db: D1Database) {}
+
     async SelectByEmail(req: GetBySupplierReq): Promise<ResData<GetBySupplierRes[]>> {
         const orm = drizzle(this.db);
         try {
@@ -28,6 +30,45 @@ export class VPSRepository {
                 Data: results
             };
         }  catch{ return { Status: httpCodes.InternalServerError, Message: ERRORS.INTERNALSERVERERROR, Data: [] }}
+    }
+
+    async SelectByStatus(): Promise<ResData<VPSGetByStatusRes[]>> {
+        const orm = drizzle(this.db);
+        try {
+            const results = await orm.select({
+                ID: VPSEntity.ID,
+                Name: VPSEntity.Name,
+                PricePerMonth: VPSEntity.PricePerMonth,
+                Storage: VPSEntity.Storage,
+                RAM: VPSEntity.RAM,
+                CPU: VPSEntity.CPU,
+                Status: VPSEntity.Status
+            }).from(VPSEntity).where(eq(VPSEntity.Status, VPSStatus.Enable));
+            return {
+                Status: httpCodes.OK,
+                Message: SUCCESS.GET,
+                Data: results
+            };
+        }  catch{ return { Status: httpCodes.InternalServerError, Message: ERRORS.INTERNALSERVERERROR, Data: [] }}
+    }
+
+    async SelectByID(req: VPSGetByIDReq): Promise<ResData<VPSGetByIDRes>> {
+        const orm = drizzle(this.db);
+        try {
+            const [results] = await orm.select({
+                Name: VPSEntity.Name,
+                PricePerMonth: VPSEntity.PricePerMonth,
+                Storage: VPSEntity.Storage,
+                RAM: VPSEntity.RAM,
+                CPU: VPSEntity.CPU,
+                Status: VPSEntity.Status
+            }).from(VPSEntity).where(eq(VPSEntity.ID, req.ID)).limit(1);
+            return {
+                Status: httpCodes.OK,
+                Message: SUCCESS.GET,
+                Data: results
+            };
+        }  catch{ return { Status: httpCodes.InternalServerError, Message: ERRORS.INTERNALSERVERERROR }}
     }
     
     async Create(req: VPSAddReq): Promise<Res> {

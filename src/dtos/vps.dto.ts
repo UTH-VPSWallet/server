@@ -33,3 +33,21 @@ export interface VPSUpdateReq {
     Status: number;
 }
 export interface VPSDeleteReq { ID: number }
+export interface VPSGetByStatusRes {
+    ID: number;
+    Name: string;
+    CPU :string;
+    RAM :string;
+    Storage :string;
+    PricePerMonth: number;
+    Status: number;
+}
+export interface VPSGetByIDReq { ID: number }
+export interface VPSGetByIDRes {
+    Name: string;
+    CPU :string;
+    RAM :string;
+    Storage :string;
+    PricePerMonth: number;
+    Status: number;
+}
