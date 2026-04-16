@@ -1,5 +1,5 @@
 import { CustomerRepository } from '../repositories/customer.repository';
-import { CustomerAddReq, CustomerLoginReq, CustomerLoginRes, CustomerRes } from '../dtos/customer.dto';
+import { CustomerAddReq, CustomerEditPassReq, CustomerLoginReq, CustomerLoginRes, CustomerRes } from '../dtos/customer.dto';
 import { Res, ResData } from '../dtos/res.dto';
 import { httpCodes } from '../constants/enum.constant';
 import { CONSTANTS } from '../constants/text.constant';
@@ -15,14 +15,15 @@ export class CustomerService {
         const jwtSecret = CONSTANTS.JWTSECRET;
         const token = await generateJWT(
             { 
-                Email: customer.Data.Email,
+                Email: customer.Data!.Email,
                 date: new Date()
             },
             jwtSecret,
             3600 * 24 * 365
         );
-        return {Status: customer.Status, Message: customer.Message, Data: { Name: customer.Data.Name, Token: token }};
+        return {Status: customer.Status, Message: customer.Message, Data: { Name: customer.Data!.Name, Token: token }};
     }
+    async ChangePass(req: CustomerEditPassReq): Promise<Res> { return await this.repo.UpdatePass(req) }
 
     async Add(req: CustomerAddReq): Promise<Res> { return await this.repo.Create(req) }
 

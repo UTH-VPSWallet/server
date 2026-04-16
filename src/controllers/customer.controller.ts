@@ -4,11 +4,11 @@ import { CustomerService } from '../services/customer.service';
 import { Res } from '../dtos/res.dto';
 import { httpCodes } from '../constants/enum.constant';
 import { CUSTOMER, ERRORS } from '../constants/text.constant';
-import { CustomerAddReq, CustomerLoginReq } from '../dtos/customer.dto';
+import { CustomerAddReq, CustomerEditPassReq, CustomerLoginReq } from '../dtos/customer.dto';
 
 export const CustomerController = new Hono<{ Bindings: { DB: D1Database } }>();
 
-//------------------------------------------------------------ SUPPLIER ------------------------------------------------------------
+//------------------------------------------------------------ CUSTOMER ----------------------------------------------------------------------
 
 CustomerController.post('/login', async (c) =>{
   let req = null;
@@ -17,6 +17,16 @@ CustomerController.post('/login', async (c) =>{
   if(!req.Email) return c.json({ Status: httpCodes.BadRequest, Message: CUSTOMER.EMAIL_REQUIRED }, httpCodes.OK)
   if(!req.Pass) return c.json({ Status: httpCodes.BadRequest, Message: CUSTOMER.PWD_REQUIRED }, httpCodes.OK)
   return withService(c, service => service.Login(req));
+})
+
+CustomerController.post('/change-pass', async (c) =>{
+  let req = null;
+  try { req = await c.req.json<CustomerEditPassReq>() }
+  catch { return c.json({ Status: httpCodes.BadRequest, Message: ERRORS.BADREQUEST }, httpCodes.BadRequest) }
+  if(!req.Email) return c.json({ Status: httpCodes.BadRequest, Message: CUSTOMER.EMAIL_REQUIRED }, httpCodes.OK)
+  if(!req.Pass) return c.json({ Status: httpCodes.BadRequest, Message: CUSTOMER.PWD_REQUIRED }, httpCodes.OK)
+  if(!req.PassNew) return c.json({ Status: httpCodes.BadRequest, Message: CUSTOMER.NEW_PWD_REQUIRED }, httpCodes.OK)
+  return withService(c, service => service.ChangePass(req));
 })
 
 CustomerController.post('/add', async (c) =>{

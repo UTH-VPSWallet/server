@@ -18,13 +18,13 @@ export class  SupplierService {
         const jwtSecret = CONSTANTS.JWTSECRET;
         const token = await generateJWT(
             { 
-                Email: user.Data.Email,
+                Email: user.Data!.Email,
                 date: new Date()
             },
             jwtSecret,
             3600 * 24 * 365
         );
-        return {Status: user.Status, Message: user.Message, Data: { Name: user.Data.Name, Token: token }};
+        return {Status: user.Status, Message: user.Message, Data: { Name: user.Data!.Name, Token: token }};
     }
 
     async ChangePass(req: SupplierEditPassReq): Promise<Res> { return await this.repo.UpdatePass(req) }

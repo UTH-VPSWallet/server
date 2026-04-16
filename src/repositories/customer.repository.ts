@@ -1,6 +1,6 @@
 import { drizzle } from 'drizzle-orm/d1';
 import { CustomerEntity } from '../entities/customer.entity';
-import { CustomerAddReq, CustomerLoginReq, CustomerRes, SelectCustomerEmailPassRes } from '../dtos/customer.dto';
+import { CustomerAddReq, CustomerEditPassReq, CustomerLoginReq, CustomerRes, SelectCustomerEmailPassRes } from '../dtos/customer.dto';
 import { CUSTOMER, ERRORS, SUCCESS } from '../constants/text.constant';
 import { Res, ResData } from '../dtos/res.dto';
 import { httpCodes, LoginStatusRes } from '../constants/enum.constant';
@@ -29,6 +29,20 @@ export class CustomerRepository {
             return{ Status: httpCodes.UnidentifiedError, Message: ERRORS.GET, Data: { Name: '' , Email: '' } };
         } catch{ return { Status: httpCodes.InternalServerError, Message: ERRORS.INTERNALSERVERERROR, Data: { Name: '' , Email: '' } } }
     }
+
+    async UpdatePass(req: CustomerEditPassReq): Promise<Res> {
+        const orm = drizzle(this.db);
+        try{
+          const [existing] = await orm.select().from(CustomerEntity).where(eq(CustomerEntity.Email, req.Email)).limit(1);
+          if (!existing) return { Status: LoginStatusRes.EmailNotExist, Message: CUSTOMER.EMAIL_NOT_EXIST }
+          const checkPass = await bcrypt.compare(req.Pass, existing.Pass);
+          if(!checkPass) return { Status: LoginStatusRes.PassWrong, Message: CUSTOMER.PASS_WRONG }
+          const hashPass = await bcrypt.hash(req.PassNew, this.SALT_ROUNDS);
+          const update = await orm.update(CustomerEntity).set({ Pass: hashPass }).where(eq(CustomerEntity.Email, req.Email));
+          if(update) return { Status: httpCodes.OK, Message: SUCCESS.UPDATE };
+          return { Status: httpCodes.ServiceUnavailable, Message: ERRORS.UPDATE };
+        } catch{ return { Status: httpCodes.InternalServerError, Message: ERRORS.INTERNALSERVERERROR } }
+      }
 
     async Create(req: CustomerAddReq): Promise<Res> {
         const orm = drizzle(this.db);
