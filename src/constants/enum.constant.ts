@@ -45,6 +45,6 @@ export enum VPSStatus {
 }
 
 export enum SupplierStatus {
-    Enable = 1,
+    Enable = 200,
     Disable = 0
 }
