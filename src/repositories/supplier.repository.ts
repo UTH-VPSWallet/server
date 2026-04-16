@@ -68,7 +68,11 @@ export class SupplierRepository {
   async GetByStatus(): Promise<ResData<GetByStatusRes[]>> {
     const orm = drizzle(this.db);
     try {
-      const results = await orm.select().from(SupplierEntity).where(eq(SupplierEntity.Status, SupplierStatus.Enable));
+      const results = await orm.select({
+        Email: SupplierEntity.Email,
+        Name: SupplierEntity.Name,
+        Location : SupplierEntity.Location,
+      }).from(SupplierEntity).where(eq(SupplierEntity.Status, SupplierStatus.Enable));
       return {
           Status: httpCodes.OK,
           Message: SUCCESS.GET,
