@@ -12,9 +12,9 @@ export interface CustomerLoginRes {
   Name: string;
 }
 export interface CustomerEditPassReq {
-    Email: string;
-    Pass: string;
-    PassNew: string;
+  Email: string;
+  Pass: string;
+  PassNew: string;
 }
 
 export interface CustomerRes {
