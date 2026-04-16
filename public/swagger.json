@@ -1,0 +1,548 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Mock VPS Marketplace API",
+    "version": "1.0.0",
+    "description": "CRUD endpoints and Swagger documentation for VPS mock data."
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3333",
+      "description": "Local server"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "schemas": {
+      "BannerSlide": {
+        "type": "object",
+        "required": ["id", "title", "subtitle", "bgColor", "ctaText", "ctaLink"],
+        "properties": {
+          "id": { "type": "string", "example": "b1" },
+          "title": { "type": "string", "example": "KHUY?N MÃI T?T 2025" },
+          "subtitle": { "type": "string", "example": "Gi?m 30% t?t c? gói VPS cho don hàng t? 6 tháng" },
+          "imageUrl": { "type": "string", "example": "/images/banner1.png" },
+          "bgColor": { "type": "string", "example": "from-green-600 to-green-800" },
+          "ctaText": { "type": "string", "example": "Mua Ngay" },
+          "ctaLink": { "type": "string", "example": "/vps" }
+        }
+      },
+      "Category": {
+        "type": "object",
+        "required": ["id", "name", "icon", "slug", "count"],
+        "properties": {
+          "id": { "type": "string", "example": "c1" },
+          "name": { "type": "string", "example": "VPS Ph? Thông" },
+          "icon": { "type": "string", "example": "???" },
+          "slug": { "type": "string", "example": "basic" },
+          "count": { "type": "integer", "example": 24 }
+        }
+      },
+      "Provider": {
+        "type": "object",
+        "required": ["id", "name", "logoUrl", "rating", "totalProducts", "location"],
+        "properties": {
+          "id": { "type": "string", "example": "p1" },
+          "name": { "type": "string", "example": "Nhân Hòa" },
+          "logoUrl": { "type": "string", "example": "/providers/nhanhoa.png" },
+          "rating": { "type": "number", "example": 4.5 },
+          "totalProducts": { "type": "integer", "example": 12 },
+          "location": { "type": "string", "example": "HN" }
+        }
+      },
+      "VpsPlan": {
+        "type": "object",
+        "required": ["id", "name", "provider", "providerId", "cpu", "ram", "storage", "ipCount", "bandwidth", "intlBandwidthIn", "intlBandwidthOut", "dataTransfer", "price", "priceUnit", "featured", "location", "os"],
+        "properties": {
+          "id": { "type": "string", "example": "v1" },
+          "name": { "type": "string", "example": "SSD Cloud VPS A" },
+          "provider": { "type": "string", "example": "Nhân Hòa" },
+          "providerId": { "type": "string", "example": "p1" },
+          "cpu": { "type": "string", "example": "3 Core Intel® Xeon® E5-26XX/Gold 6138" },
+          "ram": { "type": "string", "example": "2GB" },
+          "storage": { "type": "string", "example": "20GB SSD" },
+          "ipCount": { "type": "integer", "example": 1 },
+          "bandwidth": { "type": "string", "example": "100Mbps" },
+          "intlBandwidthIn": { "type": "string", "example": "100Mbps" },
+          "intlBandwidthOut": { "type": "string", "example": "Không gi?i h?n" },
+          "dataTransfer": { "type": "string", "example": "Không gi?i h?n" },
+          "price": { "type": "number", "example": 150000 },
+          "priceUnit": { "type": "string", "enum": ["month", "year"], "example": "month" },
+          "featured": { "type": "boolean", "example": true },
+          "badge": { "type": "string", "example": "Bán ch?y" },
+          "location": { "type": "string", "enum": ["HN", "SG", "DN"], "example": "HN" },
+          "os": { "type": "array", "items": { "type": "string" }, "example": ["Ubuntu", "CentOS", "Debian", "Windows"] },
+          "imageUrl": { "type": "string", "example": "/images/vps-v1.png" }
+        }
+      },
+      "CartItem": {
+        "type": "object",
+        "required": ["itemId", "planId", "plan", "quantity", "billingCycle"],
+        "properties": {
+          "itemId": { "type": "string", "example": "ci1" },
+          "planId": { "type": "string", "example": "v1" },
+          "plan": { "$ref": "#/components/schemas/VpsPlan" },
+          "quantity": { "type": "integer", "example": 1 },
+          "billingCycle": { "type": "string", "enum": ["monthly", "yearly"], "example": "monthly" }
+        }
+      },
+      "CartSummary": {
+        "type": "object",
+        "required": ["items", "subtotal", "discount", "total"],
+        "properties": {
+          "items": { "type": "array", "items": { "$ref": "#/components/schemas/CartItem" } },
+          "subtotal": { "type": "number", "example": 380000 },
+          "discount": { "type": "number", "example": 0 },
+          "total": { "type": "number", "example": 380000 }
+        }
+      },
+      "Order": {
+        "type": "object",
+        "required": ["id", "userId", "items", "total", "status", "createdAt"],
+        "properties": {
+          "id": { "type": "string", "example": "o1" },
+          "userId": { "type": "string", "example": "u1" },
+          "items": { "type": "array", "items": { "$ref": "#/components/schemas/CartItem" } },
+          "total": { "type": "number", "example": 380000 },
+          "status": { "type": "string", "enum": ["pending", "paid", "active", "expired", "cancelled"], "example": "pending" },
+          "paymentMethod": { "type": "string", "example": "mock" },
+          "createdAt": { "type": "string", "format": "date-time", "example": "2026-04-16T12:00:00.000Z" }
+        }
+      },
+      "CheckoutRequest": {
+        "type": "object",
+        "properties": {
+          "paymentMethod": { "type": "string", "example": "credit_card" }
+        }
+      },
+      "OrderRequest": {
+        "type": "object",
+        "properties": {
+          "items": { "type": "array", "items": { "$ref": "#/components/schemas/CartItem" } },
+          "paymentMethod": { "type": "string", "example": "credit_card" }
+        }
+      },
+      "User": {
+        "type": "object",
+        "required": ["id", "name", "email"],
+        "properties": {
+          "id": { "type": "string", "example": "u1" },
+          "name": { "type": "string", "example": "Nguy?n Van A" },
+          "email": { "type": "string", "example": "user@example.com" }
+        }
+      },
+      "UserRegister": {
+        "type": "object",
+        "required": ["name", "email", "password"],
+        "properties": {
+          "name": { "type": "string", "example": "Nguy?n Van A" },
+          "email": { "type": "string", "example": "user@example.com" },
+          "password": { "type": "string", "example": "StrongPassword123" }
+        }
+      },
+      "UserLogin": {
+        "type": "object",
+        "required": ["email", "password"],
+        "properties": {
+          "email": { "type": "string", "example": "user@example.com" },
+          "password": { "type": "string", "example": "StrongPassword123" }
+        }
+      },
+      "AuthResponse": {
+        "type": "object",
+        "required": ["token", "user"],
+        "properties": {
+          "token": { "type": "string", "example": "eyJhbGciOi..." },
+          "user": { "$ref": "#/components/schemas/User" }
+        }
+      }
+    }
+  },
+  "paths": {
+    "/api/auth/register": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Register a new user",
+        "security": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/UserRegister" }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/AuthResponse" }
+              }
+            }
+          },
+          "400": { "description": "Validation error" }
+        }
+      }
+    },
+    "/api/auth/login": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Login",
+        "security": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/UserLogin" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/AuthResponse" }
+              }
+            }
+          },
+          "401": { "description": "Invalid credentials" }
+        }
+      }
+    },
+    "/api/auth/me": {
+      "get": {
+        "tags": ["Auth"],
+        "summary": "Get current authenticated user",
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Current user",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/User" }
+              }
+            }
+          },
+          "401": { "description": "Unauthorized" }
+        }
+      }
+    },
+    "/banners": {
+      "get": {
+        "tags": ["Content"],
+        "summary": "Get banner slides for HeroCarousel",
+        "responses": {
+          "200": {
+            "description": "List of banner slides",
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/BannerSlide" } }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/categories": {
+      "get": {
+        "tags": ["Content"],
+        "summary": "Get categories for CategoryMenu",
+        "responses": {
+          "200": {
+            "description": "List of categories",
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/Category" } }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/providers": {
+      "get": {
+        "tags": ["Content"],
+        "summary": "Get providers for ProviderSlider and filters",
+        "responses": {
+          "200": {
+            "description": "List of providers",
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/Provider" } }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/vps-plans": {
+      "get": {
+        "tags": ["VpsPlans"],
+        "summary": "Get all VPS plans",
+        "parameters": [
+          { "name": "search", "in": "query", "schema": { "type": "string" } },
+          { "name": "provider", "in": "query", "schema": { "type": "string" } },
+          { "name": "providerId", "in": "query", "schema": { "type": "string" } },
+          { "name": "location", "in": "query", "schema": { "type": "string" } },
+          { "name": "priceMin", "in": "query", "schema": { "type": "number" } },
+          { "name": "priceMax", "in": "query", "schema": { "type": "number" } },
+          { "name": "sort", "in": "query", "schema": { "type": "string", "enum": ["price", "name"] } },
+          { "name": "featured", "in": "query", "schema": { "type": "boolean" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of VPS plans",
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/VpsPlan" } }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/vps-plans/{id}": {
+      "get": {
+        "tags": ["VpsPlans"],
+        "summary": "Get VPS plan details",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "VPS plan details",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/VpsPlan" }
+              }
+            }
+          },
+          "404": { "description": "Not found" }
+        }
+      }
+    },
+    "/providers/{id}/vps-plans": {
+      "get": {
+        "tags": ["VpsPlans"],
+        "summary": "Get VPS plans by provider",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "Related VPS plans",
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/VpsPlan" } }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cart": {
+      "get": {
+        "tags": ["Cart"],
+        "summary": "Get current user cart",
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Cart summary",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CartSummary" }
+              }
+            }
+          },
+          "401": { "description": "Unauthorized" }
+        }
+      },
+      "post": {
+        "tags": ["Cart"],
+        "summary": "Add an item to cart",
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["planId"],
+                "properties": {
+                  "planId": { "type": "string", "example": "v1" },
+                  "quantity": { "type": "integer", "example": 1 },
+                  "billingCycle": { "type": "string", "enum": ["monthly", "yearly"], "example": "monthly" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Cart updated",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CartSummary" }
+              }
+            }
+          },
+          "400": { "description": "Validation error" },
+          "401": { "description": "Unauthorized" }
+        }
+      }
+    },
+    "/cart/{itemId}": {
+      "put": {
+        "tags": ["Cart"],
+        "summary": "Update cart item",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          { "name": "itemId", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "quantity": { "type": "integer", "example": 2 },
+                  "billingCycle": { "type": "string", "enum": ["monthly", "yearly"], "example": "yearly" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Cart updated",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CartSummary" }
+              }
+            }
+          },
+          "401": { "description": "Unauthorized" },
+          "404": { "description": "Cart item not found" }
+        }
+      },
+      "delete": {
+        "tags": ["Cart"],
+        "summary": "Remove cart item",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          { "name": "itemId", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "204": { "description": "Deleted" },
+          "401": { "description": "Unauthorized" },
+          "404": { "description": "Cart item not found" }
+        }
+      }
+    },
+    "/checkout": {
+      "post": {
+        "tags": ["Orders"],
+        "summary": "Checkout current cart",
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/CheckoutRequest" }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Order created",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Order" }
+              }
+            }
+          },
+          "400": { "description": "Cart is empty" },
+          "401": { "description": "Unauthorized" }
+        }
+      }
+    },
+    "/orders": {
+      "get": {
+        "tags": ["Orders"],
+        "summary": "Get orders for current user",
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Order history",
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/Order" } }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Orders"],
+        "summary": "Create an order",
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/OrderRequest" }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Order created",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Order" }
+              }
+            }
+          },
+          "400": { "description": "Validation error" },
+          "401": { "description": "Unauthorized" }
+        }
+      }
+    },
+    "/orders/{id}": {
+      "get": {
+        "tags": ["Orders"],
+        "summary": "Get order by ID",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "Order details",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Order" }
+              }
+            }
+          },
+          "401": { "description": "Unauthorized" },
+          "404": { "description": "Order not found" }
+        }
+      }
+    }
+  },
+  "tags": [
+    { "name": "Auth" },
+    { "name": "Content" },
+    { "name": "VpsPlans" },
+    { "name": "Cart" },
+    { "name": "Orders" }
+  ]
+}
