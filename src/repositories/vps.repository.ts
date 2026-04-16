@@ -43,7 +43,6 @@ export class VPSRepository {
                 Storage: VPSEntity.Storage,
                 RAM: VPSEntity.RAM,
                 CPU: VPSEntity.CPU,
-                Email: VPSEntity.Email,
                 Supplier: {
                     Email: SupplierEntity.Email,
                     Name: SupplierEntity.Name,
