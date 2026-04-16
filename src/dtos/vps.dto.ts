@@ -40,7 +40,12 @@ export interface VPSGetByStatusRes {
     RAM :string;
     Storage :string;
     PricePerMonth: number;
-    Status: number;
+    Supplier: {
+        Email: string;
+        Name: string;
+        Phone: string;
+        Location: string;
+    }
 }
 export interface VPSGetByIDReq { ID: number }
 export interface VPSGetByIDRes {
@@ -50,4 +55,10 @@ export interface VPSGetByIDRes {
     Storage :string;
     PricePerMonth: number;
     Status: number;
+    Supplier: {
+        Email: string;
+        Name: string;
+        Phone: string;
+        Location: string;
+    }
 }

@@ -5,6 +5,7 @@ import { GetBySupplierRes, GetBySupplierReq, VPSAddReq, VPSUpdateReq, VPSDeleteR
 import { ERRORS, SUCCESS } from '../constants/text.constant';
 import { Res, ResData } from '../dtos/res.dto';
 import { httpCodes, VPSStatus } from '../constants/enum.constant';
+import { SupplierEntity } from '../entities/suppier.entity';
 
 export type VPSModel = InferSelectModel<typeof VPSEntity>;
 
@@ -42,14 +43,21 @@ export class VPSRepository {
                 Storage: VPSEntity.Storage,
                 RAM: VPSEntity.RAM,
                 CPU: VPSEntity.CPU,
-                Status: VPSEntity.Status
-            }).from(VPSEntity).where(eq(VPSEntity.Status, VPSStatus.Enable));
+                Email: VPSEntity.Email,
+                Supplier: {
+                    Email: SupplierEntity.Email,
+                    Name: SupplierEntity.Name,
+                    Phone: SupplierEntity.Phone,
+                    Location: SupplierEntity.Location,
+                },
+            }).from(VPSEntity).innerJoin(SupplierEntity,eq(VPSEntity.Email, SupplierEntity.Email))
+            .where(eq(VPSEntity.Status, VPSStatus.Enable));
             return {
                 Status: httpCodes.OK,
                 Message: SUCCESS.GET,
                 Data: results
             };
-        }  catch{ return { Status: httpCodes.InternalServerError, Message: ERRORS.INTERNALSERVERERROR, Data: [] }}
+        } catch{ return { Status: httpCodes.InternalServerError, Message: ERRORS.INTERNALSERVERERROR, Data: [] }}
     }
 
     async SelectByID(req: VPSGetByIDReq): Promise<ResData<VPSGetByIDRes>> {
@@ -61,8 +69,14 @@ export class VPSRepository {
                 Storage: VPSEntity.Storage,
                 RAM: VPSEntity.RAM,
                 CPU: VPSEntity.CPU,
-                Status: VPSEntity.Status
-            }).from(VPSEntity).where(eq(VPSEntity.ID, req.ID)).limit(1);
+                Status: VPSEntity.Status,
+                Supplier: {
+                    Email: SupplierEntity.Email,
+                    Name: SupplierEntity.Name,
+                    Phone: SupplierEntity.Phone,
+                    Location: SupplierEntity.Location,
+                },
+            }).from(VPSEntity).where(eq(VPSEntity.ID, req.ID)).innerJoin(SupplierEntity,eq(VPSEntity.Email, SupplierEntity.Email)).limit(1);
             return {
                 Status: httpCodes.OK,
                 Message: SUCCESS.GET,
