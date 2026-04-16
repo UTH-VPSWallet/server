@@ -38,6 +38,11 @@ SupplierController.post('/forgot-pass', async (c) =>{
   return withService(c, service => service.ForgotPass(req));
 })
 
+//------------------------------------------------------------ CUSTOMER ------------------------------------------------------------
+
+SupplierController.get('/get-by-status', async (c) => withService(c, service => service.GetByStatus()))
+
+//------------------------------------------------------------ ADMIN ------------------------------------------------------------
 
 SupplierController.get('/get-all', async (c) => withService(c, service => service.GetAll()))
 SupplierController.post('/create', async (c) => {

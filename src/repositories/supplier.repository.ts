@@ -1,11 +1,11 @@
 import { drizzle } from 'drizzle-orm/d1';
 import { and, eq, InferSelectModel } from 'drizzle-orm';
 import { SupplierEntity } from '../entities/suppier.entity';
-import { CreateReq, GetAllRes, SelectSupplierEmailPassRes, SupplierEditPassReq, SupplierLoginReq, SupplierRes, UpdatePassSupplierByEmailPhoneReq, UpdatePassSupplierByEmailPhoneRes, UpdateReq } from '../dtos/supplier.dto';
+import { CreateReq, GetAllRes, GetByStatusRes, SelectSupplierEmailPassRes, SupplierEditPassReq, SupplierLoginReq, SupplierRes, UpdatePassSupplierByEmailPhoneReq, UpdatePassSupplierByEmailPhoneRes, UpdateReq } from '../dtos/supplier.dto';
 import { ERRORS, SUCCESS, SUPPLIER } from '../constants/text.constant';
 import bcrypt from 'bcryptjs';
 import { Res, ResData } from '../dtos/res.dto';
-import { FotgotPassStatusRes, httpCodes, LoginStatusRes } from '../constants/enum.constant';
+import { FotgotPassStatusRes, httpCodes, LoginStatusRes, SupplierStatus } from '../constants/enum.constant';
 
 export type SupplierModel = InferSelectModel<typeof SupplierEntity>;
 
@@ -63,6 +63,18 @@ export class SupplierRepository {
       }
       return{ Status: httpCodes.UnidentifiedError, Message: ERRORS.GET, Data: { NewPass: '' } };
     } catch{ return { Status: httpCodes.InternalServerError, Message: ERRORS.INTERNALSERVERERROR, Data: { NewPass: '' } } }
+  }
+
+  async GetByStatus(): Promise<ResData<GetByStatusRes[]>> {
+    const orm = drizzle(this.db);
+    try {
+      const results = await orm.select().from(SupplierEntity).where(eq(SupplierEntity.Status, SupplierStatus.Enable));
+      return {
+          Status: httpCodes.OK,
+          Message: SUCCESS.GET,
+          Data: results
+      };
+    } catch{ return { Status: httpCodes.InternalServerError, Message: ERRORS.INTERNALSERVERERROR, Data: [] }}
   }
 
   async GetAll(): Promise<ResData<GetAllRes[]>> {

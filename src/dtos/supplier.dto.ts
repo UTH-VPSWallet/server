@@ -27,6 +27,13 @@ export interface UpdatePassSupplierByEmailPhoneRes {
     NewPass: string,
 }
 
+export interface GetByStatusRes {
+    Email: string;
+    Name: string;
+    Location : string;
+    Status: number;
+}
+
 export interface GetAllRes {
     Email: string;
     Name: string;

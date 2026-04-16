@@ -1,5 +1,5 @@
 import { SupplierRepository } from '../repositories/supplier.repository';
-import { CreateReq, GetAllRes, SelectSupplierEmailPassRes, SupplierEditPassReq, SupplierLoginReq, SupplierLoginRes, SupplierRes, UpdatePassSupplierByEmailPhoneReq, UpdatePassSupplierByEmailPhoneRes, UpdateReq} from '../dtos/supplier.dto';
+import { CreateReq, GetAllRes, GetByStatusRes, SelectSupplierEmailPassRes, SupplierEditPassReq, SupplierLoginReq, SupplierLoginRes, SupplierRes, UpdatePassSupplierByEmailPhoneReq, UpdatePassSupplierByEmailPhoneRes, UpdateReq} from '../dtos/supplier.dto';
 import { Res, ResData } from '../dtos/res.dto';
 import { generateJWT } from '../utils/jwt.util';
 import { CONSTANTS } from '../constants/text.constant';
@@ -31,6 +31,8 @@ export class  SupplierService {
 
     async ForgotPass(req: UpdatePassSupplierByEmailPhoneReq): Promise<ResData<UpdatePassSupplierByEmailPhoneRes>> 
     { return await this.repo.UpdatePassByEmailPhone(req) }
+
+    async GetByStatus(): Promise<ResData<GetByStatusRes[]>> { return await this.repo.GetByStatus() }
 
     async GetAll(): Promise<ResData<GetAllRes[]>> { return await this.repo.GetAll() }
 
