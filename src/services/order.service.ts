@@ -13,7 +13,8 @@ export class OrderService {
     async GetByCustomerEmail(req: GetOrdersByCustomerEmailReq): Promise<ResData<GetOrdersByCustomerEmailRes[]>>
     { return await this.repo.SelectByCustomerEmail(req) }
 
-    async GetBySupplier(req: GetOrdersBySupplierReq): Promise<ResData<OrderSupplierRes[]>> { return await this.repo.SelectBySupplier(req) }
-
     async UpdateStatus(req: OrderUpdateStatusReq): Promise<Res> { return await this.repo.UpdateStatus(req)}
+
+    async GetBySupplier(req: GetOrdersBySupplierReq): Promise<ResData<OrderSupplierRes[]>> { return await this.repo.SelectBySupplier(req) }
+    
 }

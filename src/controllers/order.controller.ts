@@ -25,24 +25,6 @@ OrderController.post('/supplier/get-orders', async (c) => {
     return c.json(await service.GetBySupplier(req));
 });
 
-
-OrderController.post('/update-status', async (c) => {
-    let req = null;
-    try { 
-        req = await c.req.json<OrderUpdateStatusReq>() 
-    } catch { 
-        return c.json({ Status: httpCodes.BadRequest, Message: ERRORS.BADREQUEST }, httpCodes.BadRequest); 
-    }
-
-    if (!req.ID) {
-        return c.json({ Status: httpCodes.BadRequest, Message: ORDER.ID_REQUIRED });
-    }
-
-    const repo = new OrderRepository(c.env.DB);
-    const service = new OrderService(repo);
-    return c.json(await service.UpdateStatus(req));
-});
-
 //------------------------------------------------------------ CUSTOMER ------------------------------------------------------------
 
 OrderController.post('/customer/add', async (c) => {
@@ -75,6 +57,17 @@ OrderController.post('/get-by-id', async (c) => {
     catch { return c.json({ Status: httpCodes.BadRequest, Message: ERRORS.BADREQUEST }, httpCodes.BadRequest) }
     if(!req.ID) return c.json({ Status: httpCodes.BadRequest, Message: ORDER.ID_REQUIRED }, httpCodes.OK)
     return withService(c, service => service.GetByID(req));
+});
+
+OrderController.post('/update-status', async (c) => {
+    let req = null;
+    try { req = await c.req.json<OrderUpdateStatusReq>() }
+    catch { return c.json({ Status: httpCodes.BadRequest, Message: ERRORS.BADREQUEST }, httpCodes.BadRequest) }
+    if (!req.ID)  return c.json({ Status: httpCodes.BadRequest, Message: ORDER.ID_REQUIRED });
+    const repo = new OrderRepository(c.env.DB);
+    const service = new OrderService(repo);
+    const result = await service.UpdateStatus(req);
+    return c.json(result);
 });
 
 //------------------------------------------------------------ PRIVATE ------------------------------------------------------------
