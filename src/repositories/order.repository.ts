@@ -89,7 +89,7 @@ export class OrderRepository {
             })
             .from(OrderEntity).where(eq(OrderEntity.CustomerEmail, req.Email))
             .innerJoin(VPSEntity, eq(OrderEntity.VPSID, VPSEntity.ID))
-            .innerJoin(SupplierEntity, eq(VPSEntity.Email, SupplierEntity.Email)).limit(1);
+            .innerJoin(SupplierEntity, eq(VPSEntity.Email, SupplierEntity.Email));
             if(results) return { Status: httpCodes.OK, Message: SUCCESS.GET, Data: results };
             return { Status : httpCodes.ServiceUnavailable, Message: ERRORS.CREATE }; 
         } catch{ return { Status: httpCodes.InternalServerError, Message: ERRORS.INTERNALSERVERERROR }}
