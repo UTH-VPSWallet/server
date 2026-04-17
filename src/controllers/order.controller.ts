@@ -32,9 +32,14 @@ OrderController.post('/customer/add', async (c) => {
     try { req = await c.req.json<OrderCreateReq>() }
     catch { return c.json({ Status: httpCodes.BadRequest, Message: ERRORS.BADREQUEST }, httpCodes.BadRequest) }
     if (!req.CustomerEmail)  return c.json({ Status: httpCodes.BadRequest, Message: ORDER.CUSTOMER_EMAIL_REQUIRED });
-    if (!req.VPSID)  return c.json({ Status: httpCodes.BadRequest, Message: ORDER.VPSID_REQUIRED });
-    if (!req.TotalMonth)  return c.json({ Status: httpCodes.BadRequest, Message: ORDER.TOTALMONTH_REQUIRED });
-    if (!req.TotalPrice)  return c.json({ Status: httpCodes.BadRequest, Message: ORDER.TOTALPRICE_REQUIRED });
+    if (!req.VPS || !Array.isArray(req.VPS) || req.VPS.length === 0)  return c.json({ Status: httpCodes.BadRequest, Message: ORDER.VPS_REQUIRED });
+
+    for (const item of req.VPS) {
+        if (!item.VPSID) return c.json({ Status: httpCodes.BadRequest, Message: ORDER.VPSID_REQUIRED });
+        if (!item.TotalMonth) return c.json({ Status: httpCodes.BadRequest, Message: ORDER.TOTALMONTH_REQUIRED });
+        if (!item.TotalPrice) return c.json({ Status: httpCodes.BadRequest, Message: ORDER.TOTALPRICE_REQUIRED });
+    }
+   
     const repo = new OrderRepository(c.env.DB);
     const service = new OrderService(repo);
     const result = await service.Add(req);

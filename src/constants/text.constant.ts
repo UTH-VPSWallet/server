@@ -69,4 +69,5 @@ export const ORDER = {
     ID_REQUIRED: 'ID required',
     TOTALMONTH_REQUIRED: 'Total Month required',
     TOTALPRICE_REQUIRED: 'Total Price required',
+    VPS_REQUIRED: 'VPS list required',
 }

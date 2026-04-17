@@ -98,16 +98,17 @@ export class OrderRepository {
     async Create(req: OrderCreateReq): Promise<Res> {
         const orm = drizzle(this.db);
         try {
-            const result = await orm.insert(OrderEntity).values({
-                ID: Date.now(),
+            const values = req.VPS.map((item) => ({
+                ID: Date.now() + Math.floor(Math.random() * 1000),
                 CustomerEmail: req.CustomerEmail,
-                VPSID: req.VPSID,
+                VPSID: item.VPSID,
                 Status: OrderStatus.Create,
                 CreatedAt: Date.now(),
                 UpdatedAt: Date.now(),
-                TotalMonth: req.TotalMonth,
-                TotalPrice: req.TotalPrice,
-            }).returning({ ID: OrderEntity.ID });
+                TotalMonth: item.TotalMonth,
+                TotalPrice: item.TotalPrice,
+            }));
+            const result = await orm.insert(OrderEntity).values(values).returning({ ID: OrderEntity.ID });
             if(result) return { Status : httpCodes.OK, Message: SUCCESS.CREATE };
             return { Status : httpCodes.ServiceUnavailable, Message: ERRORS.CREATE }; 
         } catch{ return { Status: httpCodes.InternalServerError, Message: ERRORS.INTERNALSERVERERROR }}

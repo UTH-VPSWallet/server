@@ -55,9 +55,11 @@ export interface OrderSupplierRes {
 
 export interface OrderCreateReq {
   CustomerEmail: string;
-  VPSID: number;
-  TotalMonth: number;
-  TotalPrice: number;
+  VPS: {
+    VPSID: number;
+    TotalMonth: number;
+    TotalPrice: number;
+  }[];
 }
 
 export interface OrderUpdateStatusReq {
