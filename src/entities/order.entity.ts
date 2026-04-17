@@ -5,6 +5,8 @@ export const OrderEntity = sqliteTable('tbl__Order', {
   CustomerEmail: text('CustomerEmail').notNull(),
   VPSID: integer('VPSID').notNull(),
   Status: integer('Status').notNull(),
-  CreatedAt: text('CreatedAt').notNull(),
-  UpdatedAt: text('UpdatedAt').notNull()
+  TotalMonth: integer('TotalMonth').notNull(),
+  TotalPrice: integer('TotalPrice').notNull(),
+  CreatedAt: integer('CreatedAt').notNull(),
+  UpdatedAt: integer('UpdatedAt').notNull()
 });

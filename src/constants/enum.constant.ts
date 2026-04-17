@@ -48,3 +48,7 @@ export enum SupplierStatus {
     Enable = 200,
     Disable = 0
 }
+
+export enum OrderStatus {
+    Create = 0,
+}

@@ -62,9 +62,11 @@ export const VPS = {
     PRICEMONTH_REQUIRED: 'Price Month required',
     STATUS_REQUIRED: 'Status required',
 }
-export const Order = {
+export const ORDER = {
     SUPPLIER_EMAIL_REQUIRED: 'Supplier Email required',
     CUSTOMER_EMAIL_REQUIRED: 'Customer Email required',
     VPSID_REQUIRED: 'VPSID required',
-    ORDER_ID_REQUIRED: 'Order ID required',
+    ID_REQUIRED: 'ID required',
+    TOTALMONTH_REQUIRED: 'Total Month required',
+    TOTALPRICE_REQUIRED: 'Total Price required',
 }

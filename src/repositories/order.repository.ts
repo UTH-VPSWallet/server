@@ -3,10 +3,11 @@ import { eq } from 'drizzle-orm';
 import { OrderEntity } from '../entities/order.entity';
 import { VPSEntity } from '../entities/vps.entity';
 import { CustomerEntity } from '../entities/customer.entity';
-import { GetOrdersBySupplierReq, OrderSupplierRes, OrderCreateReq, OrderUpdateStatusReq } from '../dtos/order.dto';
-import { ERRORS, SUCCESS } from '../constants/text.constant';
+import { GetOrdersBySupplierReq, OrderSupplierRes, OrderCreateReq, OrderUpdateStatusReq, GetOrdersByIDRes, GetOrdersByIDReq, GetOrdersByCustomerEmailReq, GetOrdersByCustomerEmailRes } from '../dtos/order.dto';
+import { ERRORS, SUCCESS, VPS } from '../constants/text.constant';
 import { Res, ResData } from '../dtos/res.dto';
-import { httpCodes } from '../constants/enum.constant';
+import { httpCodes, OrderStatus } from '../constants/enum.constant';
+import { SupplierEntity } from '../entities/suppier.entity';
 
 export class OrderRepository {
     constructor(private db: D1Database) {}
@@ -33,6 +34,67 @@ export class OrderRepository {
         }
     }
 
+    async SelectByID(req: GetOrdersByIDReq): Promise<ResData<GetOrdersByIDRes>> {
+        const orm = drizzle(this.db);
+        try {
+            const [results] = await orm.select({
+                CreatedAt: OrderEntity.CreatedAt,
+                UpdatedAt: OrderEntity.UpdatedAt,
+                Status: OrderEntity.Status,
+                TotalMonth: OrderEntity.TotalMonth,
+                TotalPrice: OrderEntity.TotalPrice,
+                VPS:{
+                    VPSID: OrderEntity.ID,
+                    Name: VPSEntity.Name,
+                    CPU: VPSEntity.CPU,
+                    RAM: VPSEntity.RAM,
+                    Storage: VPSEntity.Storage,
+                    PricePerMonth: VPSEntity.PricePerMonth,
+                },
+                Supplier: {
+                    Email: VPSEntity.Email,
+                    Name: SupplierEntity.Name,
+                },
+            })
+            .from(OrderEntity).where(eq(OrderEntity.ID, req.ID))
+            .innerJoin(VPSEntity, eq(OrderEntity.VPSID, VPSEntity.ID))
+            .innerJoin(SupplierEntity, eq(VPSEntity.Email, SupplierEntity.Email)).limit(1);
+            if(results) return { Status: httpCodes.OK, Message: SUCCESS.GET, Data: results };
+            return { Status : httpCodes.ServiceUnavailable, Message: ERRORS.CREATE }; 
+        } catch{ return { Status: httpCodes.InternalServerError, Message: ERRORS.INTERNALSERVERERROR }}
+    }
+
+    async SelectByCustomerEmail(req: GetOrdersByCustomerEmailReq): Promise<ResData<GetOrdersByCustomerEmailRes[]>> {
+        const orm = drizzle(this.db);
+        try {
+            const results = await orm.select({
+                ID: OrderEntity.ID,
+                CreatedAt: OrderEntity.CreatedAt,
+                UpdatedAt: OrderEntity.UpdatedAt,
+                Status: OrderEntity.Status,
+                TotalMonth: OrderEntity.TotalMonth,
+                TotalPrice: OrderEntity.TotalPrice,
+                VPS:{
+                    VPSID: OrderEntity.ID,
+                    Name: VPSEntity.Name,
+                    CPU: VPSEntity.CPU,
+                    RAM: VPSEntity.RAM,
+                    Storage: VPSEntity.Storage,
+                    PricePerMonth: VPSEntity.PricePerMonth,
+                },
+                Supplier: {
+                    Email: VPSEntity.Email,
+                    Name: SupplierEntity.Name,
+                },
+            })
+            .from(OrderEntity).where(eq(OrderEntity.CustomerEmail, req.Email))
+            .innerJoin(VPSEntity, eq(OrderEntity.VPSID, VPSEntity.ID))
+            .innerJoin(SupplierEntity, eq(VPSEntity.Email, SupplierEntity.Email)).limit(1);
+            if(results) return { Status: httpCodes.OK, Message: SUCCESS.GET, Data: results };
+            return { Status : httpCodes.ServiceUnavailable, Message: ERRORS.CREATE }; 
+        } catch{ return { Status: httpCodes.InternalServerError, Message: ERRORS.INTERNALSERVERERROR }}
+    }
+
     async Create(req: OrderCreateReq): Promise<Res> {
         const orm = drizzle(this.db);
         try {
@@ -40,41 +102,28 @@ export class OrderRepository {
                 ID: Date.now(),
                 CustomerEmail: req.CustomerEmail,
                 VPSID: req.VPSID,
-                Status: 0,
-                CreatedAt: new Date().toISOString(),
-                UpdatedAt: new Date().toISOString()
+                Status: OrderStatus.Create,
+                CreatedAt: Date.now(),
+                UpdatedAt: Date.now(),
+                TotalMonth: req.TotalMonth,
+                TotalPrice: req.TotalPrice,
             }).returning({ ID: OrderEntity.ID });
-
-            if (result) {
-                return { Status: httpCodes.OK, Message: SUCCESS.CREATE };
-            }
-
-            return { Status: httpCodes.ServiceUnavailable, Message: ERRORS.CREATE };
-        } catch {
-            return { Status: httpCodes.InternalServerError, Message: ERRORS.INTERNALSERVERERROR };
-        }
+            if(result) return { Status : httpCodes.OK, Message: SUCCESS.CREATE };
+            return { Status : httpCodes.ServiceUnavailable, Message: ERRORS.CREATE }; 
+        } catch{ return { Status: httpCodes.InternalServerError, Message: ERRORS.INTERNALSERVERERROR }}
     }
 
     async UpdateStatus(req: OrderUpdateStatusReq): Promise<Res> {
         const orm = drizzle(this.db);
         try {
             const [existing] = await orm.select().from(OrderEntity).where(eq(OrderEntity.ID, req.ID)).limit(1);
-            if (!existing) {
-                return { Status: httpCodes.ServiceUnavailable, Message: ERRORS.UPDATE };
-            }
-
+            if (!existing) return { Status: httpCodes.ServiceUnavailable, Message: ERRORS.UPDATE };
             const update = await orm.update(OrderEntity).set({
                 Status: req.Status,
-                UpdatedAt: new Date().toISOString()
+                UpdatedAt: Date.now()
             }).where(eq(OrderEntity.ID, req.ID));
-
-            if (update) {
-                return { Status: httpCodes.OK, Message: SUCCESS.UPDATE };
-            }
-
+            if (update) return { Status: httpCodes.OK, Message: SUCCESS.UPDATE };
             return { Status: httpCodes.ServiceUnavailable, Message: ERRORS.UPDATE };
-        } catch {
-            return { Status: httpCodes.InternalServerError, Message: ERRORS.INTERNALSERVERERROR };
-        }
+        } catch { return { Status: httpCodes.InternalServerError, Message: ERRORS.INTERNALSERVERERROR } }
     }
 }
