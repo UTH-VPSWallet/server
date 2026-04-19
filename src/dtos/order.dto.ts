@@ -1,20 +1,26 @@
 export interface GetOrdersBySupplierReq { Email: string }
 
 export interface GetOrdersByIDReq { ID: number }
-export interface GetOrdersByIDRes { 
+
+export interface OrderDetailRes {
+  ID: number;
+  VPSID: number;
+  Name: string;
+  CPU: string;
+  RAM: string;
+  Storage: string;
+  PricePerMonth: number;
+  TotalMonth: number;
+  PriceAtPurchase: number;
+}
+
+export interface GetOrdersByIDRes {
+  ID: number;
   CreatedAt: number;
   UpdatedAt: number;
   Status: number;
-  TotalMonth: number;
   TotalPrice: number;
-  VPS:{
-    VPSID: number;
-    Name: string;
-    CPU: string;
-    RAM: string;
-    Storage: string;
-    PricePerMonth: number;
-  }
+  VPS: OrderDetailRes[];
   Supplier: {
     Email: string;
     Name: string;
@@ -28,16 +34,8 @@ export interface GetOrdersByCustomerEmailRes {
   CreatedAt: number;
   UpdatedAt: number;
   Status: number;
-  TotalMonth: number;
   TotalPrice: number;
-  VPS:{
-    VPSID: number;
-    Name: string;
-    CPU: string;
-    RAM: string;
-    Storage: string;
-    PricePerMonth: number;
-  }
+  VPS: OrderDetailRes[];
   Supplier: {
     Email: string;
     Name: string;
@@ -47,10 +45,10 @@ export interface GetOrdersByCustomerEmailRes {
 export interface OrderSupplierRes {
   ID: number;
   CustomerName: string;
-  VPSName: string;
-  PricePerMonth: number;
+  TotalPrice: number;
   CreatedAt: number;
   Status: number;
+  VPS: OrderDetailRes[];
 }
 
 export interface OrderCreateReq {
@@ -60,6 +58,10 @@ export interface OrderCreateReq {
     TotalMonth: number;
     TotalPrice: number;
   }[];
+}
+
+export interface OrderCreateRes {
+  ID: number;
 }
 
 export interface OrderUpdateStatusReq {

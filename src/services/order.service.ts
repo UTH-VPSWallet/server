@@ -1,12 +1,12 @@
 import { OrderRepository } from '../repositories/order.repository';
-import { GetOrdersBySupplierReq, OrderSupplierRes, OrderCreateReq, OrderUpdateStatusReq, GetOrdersByIDReq, GetOrdersByIDRes, GetOrdersByCustomerEmailReq, GetOrdersByCustomerEmailRes } from '../dtos/order.dto';
+import { GetOrdersBySupplierReq, OrderSupplierRes, OrderCreateReq, OrderCreateRes, OrderUpdateStatusReq, GetOrdersByIDReq, GetOrdersByIDRes, GetOrdersByCustomerEmailReq, GetOrdersByCustomerEmailRes } from '../dtos/order.dto';
 import { Res, ResData } from '../dtos/res.dto';
 
 export class OrderService {
 
     constructor(private repo: OrderRepository) {}
 
-    async Add(req: OrderCreateReq): Promise<Res> { return await this.repo.Create(req) }
+    async Add(req: OrderCreateReq): Promise<ResData<OrderCreateRes>> { return await this.repo.Create(req) }
 
     async GetByID(req: GetOrdersByIDReq): Promise<ResData<GetOrdersByIDRes>> { return await this.repo.SelectByID(req) }
 
