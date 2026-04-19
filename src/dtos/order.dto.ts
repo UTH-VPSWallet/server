@@ -35,11 +35,6 @@ export interface GetOrdersByCustomerEmailRes {
   UpdatedAt: number;
   Status: number;
   TotalPrice: number;
-  VPS: OrderDetailRes[];
-  Supplier: {
-    Email: string;
-    Name: string;
-  }
 }
 
 export interface OrderSupplierRes {

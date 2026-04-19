@@ -121,48 +121,17 @@ export class OrderRepository {
     async SelectByCustomerEmail(req: GetOrdersByCustomerEmailReq): Promise<ResData<GetOrdersByCustomerEmailRes[]>> {
         const orm = drizzle(this.db);
         try {
-            const rows = await orm.select({
+            const results = await orm.select({
                 ID: OrderEntity.ID,
                 CreatedAt: OrderEntity.CreatedAt,
                 UpdatedAt: OrderEntity.UpdatedAt,
                 Status: OrderEntity.Status,
-                TotalPrice: OrderEntity.TotalPrice,
-                OrderDetailID: OrderDetailEntity.ID,
-                VPSID: OrderDetailEntity.VPSID,
-                VPSName: VPSEntity.Name,
-                CPU: VPSEntity.CPU,
-                RAM: VPSEntity.RAM,
-                Storage: VPSEntity.Storage,
-                PricePerMonth: VPSEntity.PricePerMonth,
-                TotalMonth: OrderDetailEntity.TotalMonth,
-                PriceAtPurchase: OrderDetailEntity.PriceAtPurchase,
-                SupplierEmail: SupplierEntity.Email,
-                SupplierName: SupplierEntity.Name
+                TotalPrice: OrderEntity.TotalPrice
             })
             .from(OrderEntity)
-            .innerJoin(OrderDetailEntity, eq(OrderEntity.ID, OrderDetailEntity.OrderID))
-            .innerJoin(VPSEntity, eq(OrderDetailEntity.VPSID, VPSEntity.ID))
-            .innerJoin(SupplierEntity, eq(VPSEntity.Email, SupplierEntity.Email))
             .where(eq(OrderEntity.CustomerEmail, req.Email));
 
-            const map = new Map<number, GetOrdersByCustomerEmailRes>();
-            rows.forEach(row => {
-                if (!map.has(row.ID)) {
-                    map.set(row.ID, {
-                        ID: row.ID, CreatedAt: row.CreatedAt, UpdatedAt: row.UpdatedAt,
-                        Status: row.Status, TotalPrice: row.TotalPrice,
-                        Supplier: { Email: row.SupplierEmail, Name: row.SupplierName },
-                        VPS: []
-                    });
-                }
-                map.get(row.ID)?.VPS.push({
-                    ID: row.OrderDetailID, VPSID: row.VPSID, Name: row.VPSName, CPU: row.CPU, RAM: row.RAM,
-                    Storage: row.Storage, PricePerMonth: row.PricePerMonth,
-                    TotalMonth: row.TotalMonth, PriceAtPurchase: row.PriceAtPurchase
-                });
-            });
-
-            return { Status: httpCodes.OK, Message: SUCCESS.GET, Data: Array.from(map.values()) };
+            return { Status: httpCodes.OK, Message: SUCCESS.GET, Data: results };
         } catch {
             return { Status: httpCodes.InternalServerError, Message: ERRORS.INTERNALSERVERERROR };
         }
