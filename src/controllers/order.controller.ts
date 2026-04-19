@@ -1,7 +1,7 @@
 import { Hono } from 'hono';
 import { OrderService } from '../services/order.service';
 import { OrderRepository } from '../repositories/order.repository';
-import { GetOrdersByCustomerEmailReq, GetOrdersByIDReq, GetOrdersBySupplierReq, OrderCreateReq, OrderUpdateStatusReq } from '../dtos/order.dto';
+import { GetOrdersByCustomerEmailReq, GetOrdersByIDReq, GetOrdersBySupplierReq, OrderCancelReq, OrderCreateReq, OrderUpdateStatusReq } from '../dtos/order.dto';
 import { ERRORS, ORDER } from '../constants/text.constant';
 import { httpCodes } from '../constants/enum.constant';
 import { Res } from '../dtos/res.dto';
@@ -52,6 +52,24 @@ OrderController.post('/get-by-customer', async (c) => {
     catch { return c.json({ Status: httpCodes.BadRequest, Message: ERRORS.BADREQUEST }, httpCodes.BadRequest) }
     if(!req.Email) return c.json({ Status: httpCodes.BadRequest, Message: ORDER.ID_REQUIRED }, httpCodes.OK)
     return withService(c, service => service.GetByCustomerEmail(req));
+});
+
+OrderController.post('/customer/cancel', async (c) => {
+    let req = null;
+    try { 
+        req = await c.req.json<OrderCancelReq>();
+    } catch { 
+        return c.json({ Status: httpCodes.BadRequest, Message: ERRORS.BADREQUEST }, httpCodes.BadRequest); 
+    }
+
+    if (!req.ID) {
+        return c.json({ Status: httpCodes.BadRequest, Message: ORDER.ID_REQUIRED });
+    }
+
+    const repo = new OrderRepository(c.env.DB);
+    const service = new OrderService(repo);
+    const result = await service.Cancel(req);
+    return c.json(result);
 });
 
 //------------------------------------------------------------ GENERAL ------------------------------------------------------------

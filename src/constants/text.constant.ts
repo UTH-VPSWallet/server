@@ -70,4 +70,6 @@ export const ORDER = {
     TOTALMONTH_REQUIRED: 'Total Month required',
     TOTALPRICE_REQUIRED: 'Total Price required',
     VPS_REQUIRED: 'VPS list required',
+    CANCEL_ONLY_PENDING: 'Only orders with status "Pending" can be canceled',
+    ORDER_CANCELED: 'Order has been canceled successfully',
 }

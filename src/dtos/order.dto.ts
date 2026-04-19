@@ -63,3 +63,7 @@ export interface OrderUpdateStatusReq {
   ID: number;
   Status: number;
 }
+
+export interface OrderCancelReq {
+    ID: number;
+}

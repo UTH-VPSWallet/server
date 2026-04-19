@@ -5,8 +5,8 @@ import { OrderDetailEntity } from '../entities/orderDetail.entity';
 import { VPSEntity } from '../entities/vps.entity';
 import { CustomerEntity } from '../entities/customer.entity';
 import { SupplierEntity } from '../entities/suppier.entity';
-import { GetOrdersBySupplierReq, OrderSupplierRes, OrderCreateReq, OrderCreateRes, OrderUpdateStatusReq, GetOrdersByIDRes, GetOrdersByIDReq, GetOrdersByCustomerEmailReq, GetOrdersByCustomerEmailRes } from '../dtos/order.dto';
-import { ERRORS, SUCCESS } from '../constants/text.constant';
+import { GetOrdersBySupplierReq, OrderSupplierRes, OrderCreateReq, OrderCreateRes, OrderUpdateStatusReq, GetOrdersByIDRes, GetOrdersByIDReq, GetOrdersByCustomerEmailReq, GetOrdersByCustomerEmailRes, OrderCancelReq } from '../dtos/order.dto';
+import { ERRORS, ORDER, SUCCESS } from '../constants/text.constant';
 import { Res, ResData } from '../dtos/res.dto';
 import { httpCodes, OrderStatus } from '../constants/enum.constant';
 
@@ -181,5 +181,38 @@ export class OrderRepository {
             if (update) return { Status: httpCodes.OK, Message: SUCCESS.UPDATE };
             return { Status: httpCodes.ServiceUnavailable, Message: ERRORS.UPDATE };
         } catch { return { Status: httpCodes.InternalServerError, Message: ERRORS.INTERNALSERVERERROR } }
+    }
+
+    async CancelOrder(req: OrderCancelReq): Promise<Res> {
+        const orm = drizzle(this.db);
+        try {
+            const [existing] = await orm.select()
+                .from(OrderEntity)
+                .where(eq(OrderEntity.ID, req.ID))
+                .limit(1);
+
+            if (!existing) {
+                return { Status: httpCodes.NotFound, Message: ERRORS.NOTFOUND };
+            }
+
+            if (existing.Status !== 0) {
+                return { Status: httpCodes.BadRequest, Message: ORDER.CANCEL_ONLY_PENDING };
+            }
+
+            const result = await orm.update(OrderEntity)
+                .set({ 
+                    Status: 3, 
+                    UpdatedAt: Date.now() 
+                })
+                .where(eq(OrderEntity.ID, req.ID));
+
+            if (result) {
+                return { Status: httpCodes.OK, Message: ORDER.ORDER_CANCELED };
+            }
+            
+            return { Status: httpCodes.ServiceUnavailable, Message: ERRORS.UPDATE };
+        } catch {
+            return { Status: httpCodes.InternalServerError, Message: ERRORS.INTERNALSERVERERROR };
+        }
     }
 }
