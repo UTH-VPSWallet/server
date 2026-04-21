@@ -4,6 +4,7 @@ import { SupplierController } from './controllers/supplier.controller';
 import { VPSController } from "./controllers/vps.controller";
 import { OrderController } from "./controllers/order.controller";
 import { CustomerController } from "./controllers/customer.controller";
+import { EvaluationController } from "./controllers/evaluation.controller";
 import { httpCodes } from "./constants/enum.constant";
 import { ERRORS } from "./constants/text.constant";
 
@@ -23,5 +24,6 @@ app.route('/supplier', SupplierController);
 app.route('/vps', VPSController);
 app.route('/order', OrderController);
 app.route('/customer', CustomerController);
+app.route('/evaluation', EvaluationController);
 app.notFound((c) => c.json({Status: httpCodes.NotFound, Message: ERRORS.NOTFOUND }, httpCodes.NotFound));
 export default app;

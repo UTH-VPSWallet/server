@@ -73,3 +73,9 @@ export const ORDER = {
     CANCEL_ONLY_PENDING: 'Only orders with status "Pending" can be canceled',
     ORDER_CANCELED: 'Order has been canceled successfully',
 }
+export const EVALUATION = {
+    VPSID_REQUIRED: 'VPSID required',
+    EMAIL_REQUIRED: 'Email required',
+    RATE_REQUIRED: 'Rate required',
+    ACTIVE_ORDER_REQUIRED: 'You can only evaluate the active VPS servers in your order'
+}
