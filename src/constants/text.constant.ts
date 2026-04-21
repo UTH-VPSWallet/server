@@ -79,3 +79,7 @@ export const EVALUATION = {
     RATE_REQUIRED: 'Rate required',
     ACTIVE_ORDER_REQUIRED: 'You can only evaluate the active VPS servers in your order'
 }
+export const COMMENT = {
+    VPSID_REQUIRED: 'VPSID required',
+    CONTENT_REQUIRED: 'Content required'
+}
