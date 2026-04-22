@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS tbl__Comment;
+
 --Comment Table
 CREATE TABLE IF NOT EXISTS tbl__Comment (
     ID INTEGER PRIMARY KEY,

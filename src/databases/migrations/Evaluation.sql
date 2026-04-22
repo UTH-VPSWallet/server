@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS tbl__Evaluation;
+
 --Evaluation Table
 CREATE TABLE IF NOT EXISTS tbl__Evaluation (
     VPSID INTEGER PRIMARY KEY,
