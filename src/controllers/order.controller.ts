@@ -8,18 +8,13 @@ import { Res } from '../dtos/res.dto';
 
 export const OrderController = new Hono<{ Bindings: { DB: D1Database } }>();
 
-OrderController.post('/supplier/get-orders', async (c) => {
+//------------------------------------------------------------ SUPPLIER ------------------------------------------------------------
+
+OrderController.post('/supplier/get-all', async (c) => {
     let req = null;
-    try { 
-        req = await c.req.json<GetOrdersBySupplierReq>() 
-    } catch { 
-        return c.json({ Status: httpCodes.BadRequest, Message: ERRORS.BADREQUEST }, httpCodes.BadRequest); 
-    }
-
-    if (!req.Email) {
-        return c.json({ Status: httpCodes.BadRequest, Message: ORDER.SUPPLIER_EMAIL_REQUIRED });
-    }
-
+    try { req = await c.req.json<GetOrdersBySupplierReq>() } 
+    catch { return c.json({ Status: httpCodes.BadRequest, Message: ERRORS.BADREQUEST }, httpCodes.BadRequest) }
+    if (!req.Email) return c.json({ Status: httpCodes.BadRequest, Message: ORDER.SUPPLIER_EMAIL_REQUIRED });
     const repo = new OrderRepository(c.env.DB);
     const service = new OrderService(repo);
     return c.json(await service.GetBySupplier(req));
