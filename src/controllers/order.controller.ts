@@ -1,7 +1,7 @@
 import { Hono } from 'hono';
 import { OrderService } from '../services/order.service';
 import { OrderRepository } from '../repositories/order.repository';
-import { GetOrdersByCustomerEmailReq, GetOrdersByIDReq, GetOrdersBySupplierReq, OrderCancelReq, OrderCreateReq, OrderUpdateStatusReq } from '../dtos/order.dto';
+import { GetOrdersByCustomerEmailReq, GetOrdersByIDReq, GetOrderBySupplierReq, OrderCancelReq, OrderCreateReq, OrderUpdateStatusReq } from '../dtos/order.dto';
 import { ERRORS, ORDER } from '../constants/text.constant';
 import { httpCodes } from '../constants/enum.constant';
 import { Res } from '../dtos/res.dto';
@@ -12,7 +12,7 @@ export const OrderController = new Hono<{ Bindings: { DB: D1Database } }>();
 
 OrderController.post('/supplier/get-all', async (c) => {
     let req = null;
-    try { req = await c.req.json<GetOrdersBySupplierReq>() } 
+    try { req = await c.req.json<GetOrderBySupplierReq>() } 
     catch { return c.json({ Status: httpCodes.BadRequest, Message: ERRORS.BADREQUEST }, httpCodes.BadRequest) }
     if (!req.Email) return c.json({ Status: httpCodes.BadRequest, Message: ORDER.SUPPLIER_EMAIL_REQUIRED });
     const repo = new OrderRepository(c.env.DB);

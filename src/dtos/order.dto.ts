@@ -1,5 +1,5 @@
-export interface GetOrdersBySupplierReq { Email: string }
-export interface GetOrderSupplierRes {
+export interface GetOrderBySupplierReq { Email: string }
+export interface GetOrderBySupplierRes {
   ID: number;
   CustomerName: string;
   TotalPrice: number;

@@ -5,7 +5,7 @@ import { OrderDetailEntity } from '../entities/orderDetail.entity';
 import { VPSEntity } from '../entities/vps.entity';
 import { CustomerEntity } from '../entities/customer.entity';
 import { SupplierEntity } from '../entities/suppier.entity';
-import { GetOrdersBySupplierReq, GetOrderSupplierRes, OrderCreateReq, OrderCreateRes, OrderUpdateStatusReq, GetOrdersByIDRes, GetOrdersByIDReq, GetOrdersByCustomerEmailReq, GetOrdersByCustomerEmailRes, OrderCancelReq } from '../dtos/order.dto';
+import { GetOrderBySupplierReq, GetOrderBySupplierRes, OrderCreateReq, OrderCreateRes, OrderUpdateStatusReq, GetOrdersByIDRes, GetOrdersByIDReq, GetOrdersByCustomerEmailReq, GetOrdersByCustomerEmailRes, OrderCancelReq } from '../dtos/order.dto';
 import { ERRORS, ORDER, SUCCESS } from '../constants/text.constant';
 import { Res, ResData } from '../dtos/res.dto';
 import { httpCodes, OrderStatus } from '../constants/enum.constant';
@@ -13,7 +13,7 @@ import { httpCodes, OrderStatus } from '../constants/enum.constant';
 export class OrderRepository {
     constructor(private db: D1Database) {}
 
-    async SelectBySupplier(req: GetOrdersBySupplierReq): Promise<ResData<GetOrderSupplierRes[]>> {
+    async SelectBySupplier(req: GetOrderBySupplierReq): Promise<ResData<GetOrderBySupplierRes[]>> {
         const orm = drizzle(this.db);
         try {
             const rows = await orm.select({
@@ -39,7 +39,7 @@ export class OrderRepository {
             .where(eq(VPSEntity.Email, req.Email));
 
             // Logic gộp dữ liệu
-            const map = new Map<number, GetOrderSupplierRes>();
+            const map = new Map<number, GetOrderBySupplierRes>();
             rows.forEach(row => {
                 if (!map.has(row.ID)) {
                     map.set(row.ID, {
