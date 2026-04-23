@@ -37,7 +37,7 @@ export interface GetOrdersByCustomerEmailRes {
   TotalPrice: number;
 }
 
-export interface OrderSupplierRes {
+export interface GetOrderSupplierRes {
   ID: number;
   CustomerName: string;
   TotalPrice: number;

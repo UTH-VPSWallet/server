@@ -1,5 +1,5 @@
 import { OrderRepository } from '../repositories/order.repository';
-import { GetOrdersBySupplierReq, OrderSupplierRes, OrderCreateReq, OrderCreateRes, OrderUpdateStatusReq, GetOrdersByIDReq, GetOrdersByIDRes, GetOrdersByCustomerEmailReq, GetOrdersByCustomerEmailRes, OrderCancelReq } from '../dtos/order.dto';
+import { GetOrdersBySupplierReq, GetOrderSupplierRes, OrderCreateReq, OrderCreateRes, OrderUpdateStatusReq, GetOrdersByIDReq, GetOrdersByIDRes, GetOrdersByCustomerEmailReq, GetOrdersByCustomerEmailRes, OrderCancelReq } from '../dtos/order.dto';
 import { Res, ResData } from '../dtos/res.dto';
 
 export class OrderService {
@@ -15,7 +15,7 @@ export class OrderService {
 
     async UpdateStatus(req: OrderUpdateStatusReq): Promise<Res> { return await this.repo.UpdateStatus(req)}
 
-    async GetBySupplier(req: GetOrdersBySupplierReq): Promise<ResData<OrderSupplierRes[]>> { return await this.repo.SelectBySupplier(req) }
+    async GetBySupplier(req: GetOrdersBySupplierReq): Promise<ResData<GetOrderSupplierRes[]>> { return await this.repo.SelectBySupplier(req) }
     
     async Cancel(req: OrderCancelReq): Promise<Res> { return await this.repo.CancelOrder(req); }
 }
