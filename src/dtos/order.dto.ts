@@ -2,6 +2,7 @@ export interface GetOrderBySupplierReq { Email: string }
 export interface GetOrderBySupplierRes {
   ID: number;
   CustomerName: string;
+  CustomerEmail: string;
   TotalPrice: number;
   CreatedAt: number;
   Status: number;

@@ -19,6 +19,7 @@ export class OrderRepository {
             const rows = await orm.select({
                 ID: OrderEntity.ID,
                 CustomerName: CustomerEntity.Name,
+                CustomerEmail: CustomerEntity.Email,
                 TotalPrice: OrderEntity.TotalPrice,
                 CreatedAt: OrderEntity.CreatedAt,
                 Status: OrderEntity.Status,
@@ -43,7 +44,10 @@ export class OrderRepository {
             rows.forEach(row => {
                 if (!map.has(row.ID)) {
                     map.set(row.ID, {
-                        ID: row.ID, CustomerName: row.CustomerName, TotalPrice: row.TotalPrice,
+                        ID: row.ID,
+                        CustomerName: row.CustomerName,
+                        TotalPrice: row.TotalPrice,
+                        CustomerEmail: row.CustomerEmail,
                         CreatedAt: row.CreatedAt, Status: row.Status, VPS: []
                     });
                 }
