@@ -36,7 +36,7 @@ export class EvaluationRepository {
                 Rate: req.Rate,
                 Status: 1
             }).onConflictDoUpdate({
-                target: [EvaluationEntity.VPSID],
+                target: [EvaluationEntity.VPSID, EvaluationEntity.Email],
                 set: { Rate: req.Rate }
             });
 

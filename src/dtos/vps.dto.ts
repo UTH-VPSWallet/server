@@ -46,6 +46,10 @@ export interface VPSGetByStatusRes {
         Phone: string;
         Location: string;
     }
+    Evaluation: {
+        Rate: number;
+        TotalReview: number;
+    }
 }
 export interface VPSGetByIDReq { ID: number }
 export interface VPSGetByIDRes {
@@ -60,5 +64,9 @@ export interface VPSGetByIDRes {
         Name: string;
         Phone: string;
         Location: string;
+    }
+    Evaluation: {
+        Rate: number;
+        TotalReview: number;
     }
 }
