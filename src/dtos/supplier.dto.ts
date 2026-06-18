@@ -48,6 +48,7 @@ export interface CreateReq {
     Phone: string;
     Name: string;
     Location : string;
+    Status: number;
 }
 
 export interface UpdateReq {

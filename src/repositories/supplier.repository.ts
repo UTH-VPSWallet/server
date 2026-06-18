@@ -120,7 +120,7 @@ export class SupplierRepository {
         Email: req.Email,
         Pass : "$2b$10$lZ.m7l67a/dCx48/Fdeqf.c0iry..KGa5p2TQE4bQ4HpXX3SqTz6m",
         Location: req.Location,
-        Status : 1
+        Status : req.Status
       }).returning({ insertedId: SupplierEntity.Email });
       if(result.length === 0) return{ Status: httpCodes.ServiceUnavailable, Message: ERRORS.CREATE };
       return {
