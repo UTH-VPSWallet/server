@@ -53,6 +53,8 @@ export interface CreateReq {
 
 export interface UpdateReq {
     Email: string;
+    Logo: string;
+    Phone: string;
     Name: string;
     Location : string;
     Status : number;

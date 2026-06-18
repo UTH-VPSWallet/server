@@ -142,7 +142,9 @@ export class SupplierRepository {
         return res;
       }
       await orm.update(SupplierEntity).set({
+        Logo: req.Logo ?? existing.Logo,
         Name: req.Name ?? existing.Name,
+        Phone: req.Phone ?? existing.Phone,
         Location : req.Location ?? existing.Location,
         Status: req.Status ?? existing.Status
       }).where(eq(SupplierEntity.Email, req.Email));
