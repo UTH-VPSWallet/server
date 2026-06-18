@@ -36,6 +36,7 @@ export interface GetByStatusRes {
 export interface GetAllRes {
     Email: string;
     Name: string;
+    Logo: string;
     Location : string;
     Status: number;
 }[]

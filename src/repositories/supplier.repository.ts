@@ -89,6 +89,7 @@ export class SupplierRepository {
             const resData: GetAllRes[] = suppliers.map(x => ({
               Name: x.Name,
               Email: x.Email,
+              Logo: x.Logo,
               Location :x.Location,
               Status: x.Status
             }))
