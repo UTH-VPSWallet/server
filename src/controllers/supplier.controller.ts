@@ -44,7 +44,7 @@ SupplierController.get('/get-by-status', async (c) => withService(c, service => 
 
 //------------------------------------------------------------ ADMIN ------------------------------------------------------------
 
-SupplierController.get('/get-all', async (c) => withService(c, service => service.GetAll()))
+SupplierController.get('/admin/get-all', async (c) => withService(c, service => service.GetAll()))
 SupplierController.post('/create', async (c) => {
   let req = null;
   let res = new Res();
