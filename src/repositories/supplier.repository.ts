@@ -99,7 +99,7 @@ export class SupplierRepository {
         res.Message = ERRORS.GET;
         return res;
       }
-      res.Status = 1001;
+      res.Status = httpCodes.OK;
       res.Message = SUCCESS.GET;
       res.Data = resData;
       return res;
