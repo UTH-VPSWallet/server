@@ -45,22 +45,22 @@ SupplierController.get('/get-by-status', async (c) => withService(c, service => 
 //------------------------------------------------------------ ADMIN ------------------------------------------------------------
 
 SupplierController.get('/admin/get-all', async (c) => withService(c, service => service.GetAll()))
-SupplierController.post('/create', async (c) => {
+SupplierController.post('/admin/create', async (c) => {
   let req = null;
   let res = new Res();
 
   try {
-      req = await c.req.json<CreateReq>();
+    req = await c.req.json<CreateReq>();
   } catch {
-      res.Status = 4000;
-      res.Message = ERRORS.ERROR_4000;
-      return c.json(res);
+    res.Status = 4000;
+    res.Message = ERRORS.ERROR_4000;
+    return c.json(res);
   }
 
   if (!req.Email) {
-      res.Status = 6003;
-      res.Message = "Bắt buộc phải nhập email"
-      return c.json(res);
+    res.Status = 6003;
+    res.Message = "Bắt buộc phải nhập email"
+    return c.json(res);
   }
 
     const repo = new SupplierRepository(c.env.DB);

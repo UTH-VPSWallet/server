@@ -75,9 +75,9 @@ export class SupplierRepository {
         Location : SupplierEntity.Location,
       }).from(SupplierEntity).where(eq(SupplierEntity.Status, SupplierStatus.Enable));
       return {
-          Status: httpCodes.OK,
-          Message: SUCCESS.GET,
-          Data: results
+        Status: httpCodes.OK,
+        Message: SUCCESS.GET,
+        Data: results
       };
     } catch{ return { Status: httpCodes.InternalServerError, Message: ERRORS.INTERNALSERVERERROR, Data: [] }}
   }
@@ -111,26 +111,24 @@ export class SupplierRepository {
   }
 
   async Create(req: CreateReq): Promise<Res> {
-      const orm = drizzle(this.db);
-      try {
-        // const result = await orm.insert(SupplierEntity).values({
-        //   Name: req.Name,
-        //   Email: req.Email,
-        //   Pass : "$2b$10$lZ.m7l67a/dCx48/Fdeqf.c0iry..KGa5p2TQE4bQ4HpXX3SqTz6m",
-        //   Location: req.Location,
-        //   Status : 1
-        // }).returning({ insertedId: SupplierEntity.Email });
-
-        return {
-        Status : 200,
-        Message: "Tạo thành công"
-        };
-      } catch {
-        return {
-        Status : 500,
-        Message: "Tạo thất bại"
-        };
-  }}
+    const orm = drizzle(this.db);
+    try {
+      const result = await orm.insert(SupplierEntity).values({
+        Name: req.Name,
+        Logo: req.Logo,
+        Phone: req.Phone,
+        Email: req.Email,
+        Pass : "$2b$10$lZ.m7l67a/dCx48/Fdeqf.c0iry..KGa5p2TQE4bQ4HpXX3SqTz6m",
+        Location: req.Location,
+        Status : 1
+      }).returning({ insertedId: SupplierEntity.Email });
+      if(result.length === 0) return{ Status: httpCodes.ServiceUnavailable, Message: ERRORS.CREATE };
+      return {
+        Status: httpCodes.OK,
+        Message: SUCCESS.CREATE,
+      };
+    } catch{ return { Status: httpCodes.InternalServerError, Message: ERRORS.INTERNALSERVERERROR }}
+  }
 
   async Update(req: UpdateReq): Promise<Res>
   {

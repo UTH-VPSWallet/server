@@ -44,6 +44,8 @@ export interface GetAllRes {
 
 export interface CreateReq {
     Email: string;
+    Logo: string;
+    Phone: string;
     Name: string;
     Location : string;
 }
