@@ -149,14 +149,11 @@ export class SupplierRepository {
         Location : req.Location ?? existing.Location,
         Status: req.Status ?? existing.Status
       }).where(eq(SupplierEntity.Email, req.Email));
-      res.Status = 1003;
-      res.Message = SUCCESS.UPDATE;
-      return res;
-    } catch {
-      res.Status = 3000;
-      res.Message = ERRORS.ERROR_3000;
-      return res;
-    }
+      return {
+        Status: httpCodes.OK,
+        Message: SUCCESS.UPDATE,
+      };
+    } catch{ return { Status: httpCodes.InternalServerError, Message: ERRORS.INTERNALSERVERERROR }}
   }
 
   async GetByEmail(req : string): Promise<ResData<SupplierRes>> {
