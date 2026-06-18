@@ -1,7 +1,7 @@
 import { drizzle } from 'drizzle-orm/d1';
-import { eq, InferSelectModel, sql } from 'drizzle-orm';
+import { and, eq, InferSelectModel, sql } from 'drizzle-orm';
 import { VPSEntity } from '../entities/vps.entity';;
-import { GetBySupplierRes, GetBySupplierReq, VPSAddReq, VPSUpdateReq, VPSDeleteReq, VPSGetByStatusRes, VPSGetByIDRes, VPSGetByIDReq } from '../dtos/vps.dto';
+import { GetBySupplierRes, GetBySupplierReq, VPSAddReq, VPSUpdateReq, VPSDeleteReq, VPSGetByStatusRes, VPSGetByIDRes, VPSGetByIDReq, VPSSelectByCategoryReq } from '../dtos/vps.dto';
 import { ERRORS, SUCCESS } from '../constants/text.constant';
 import { Res, ResData } from '../dtos/res.dto';
 import { httpCodes, VPSStatus } from '../constants/enum.constant';
@@ -61,6 +61,41 @@ export class VPSRepository {
             .innerJoin(SupplierEntity,eq(VPSEntity.Email, SupplierEntity.Email))
             .leftJoin(EvaluationEntity, eq(VPSEntity.ID, EvaluationEntity.VPSID))
             .where(eq(VPSEntity.Status, VPSStatus.Enable))
+            .groupBy(VPSEntity.ID, SupplierEntity.Email);
+            return {
+                Status: httpCodes.OK,
+                Message: SUCCESS.GET,
+                Data: results
+            };
+        } catch{ return { Status: httpCodes.InternalServerError, Message: ERRORS.INTERNALSERVERERROR, Data: [] }}
+    }
+
+    async SelectByCategory(req: VPSSelectByCategoryReq): Promise<ResData<VPSGetByStatusRes[]>> {
+        const orm = drizzle(this.db);
+        try {
+            const results = await orm.select({
+                ID: VPSEntity.ID,
+                Name: VPSEntity.Name,
+                PricePerMonth: VPSEntity.PricePerMonth,
+                Storage: VPSEntity.Storage,
+                RAM: VPSEntity.RAM,
+                CPU: VPSEntity.CPU,
+                Category: VPSEntity.Category,
+                Supplier: {
+                    Email: SupplierEntity.Email,
+                    Name: SupplierEntity.Name,
+                    Phone: SupplierEntity.Phone,
+                    Location: SupplierEntity.Location,
+                },
+                Evaluation: {
+                    Rate: sql<number>`COALESCE(CAST(AVG(${EvaluationEntity.Rate}) AS FLOAT), 0)`,
+                    TotalReview: sql<number>`COUNT(${EvaluationEntity.Rate})`
+                }
+            })
+            .from(VPSEntity)
+            .innerJoin(SupplierEntity,eq(VPSEntity.Email, SupplierEntity.Email))
+            .leftJoin(EvaluationEntity, eq(VPSEntity.ID, EvaluationEntity.VPSID))
+            .where(and(eq(VPSEntity.Status, VPSStatus.Enable), eq(VPSEntity.Category, req.ID)))
             .groupBy(VPSEntity.ID, SupplierEntity.Email);
             return {
                 Status: httpCodes.OK,

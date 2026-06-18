@@ -75,3 +75,5 @@ export interface VPSGetByIDRes {
         TotalReview: number;
     }
 }
+
+export interface VPSSelectByCategoryReq { ID: number }

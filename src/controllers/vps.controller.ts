@@ -4,7 +4,7 @@ import { VPSRepository } from '../repositories/vps.repository';
 import { AuthMiddleware } from '../middlewares/auth.middleware';
 import { Res } from '../dtos/res.dto';
 import { ERRORS, SUPPLIER, VPS } from '../constants/text.constant';
-import { GetBySupplierReq, VPSAddReq, VPSDeleteReq, VPSGetByIDReq, VPSUpdateReq } from '../dtos/vps.dto';
+import { GetBySupplierReq, VPSAddReq, VPSDeleteReq, VPSGetByIDReq, VPSSelectByCategoryReq, VPSUpdateReq } from '../dtos/vps.dto';
 import { httpCodes } from '../constants/enum.constant';
 
 export const VPSController = new Hono<{ Bindings: { DB: D1Database } }>();
@@ -65,6 +65,16 @@ VPSController.post('/supplier/remove', async (c) => {
 //------------------------------------------------------------ CUSTOMER ------------------------------------------------------------
 
 VPSController.get('/customer/get-all', async (c) => withService(c, service => service.GetByStatus()))
+VPSController.post('/customer/get-by-category', async (c) => {
+    let req = null;
+    try { req = await c.req.json<VPSSelectByCategoryReq>() }
+    catch { return c.json({ Status: httpCodes.BadRequest, Message: ERRORS.BADREQUEST }, httpCodes.BadRequest) }
+    if (!req.ID)  return c.json({ Status: httpCodes.BadRequest, Message: VPS.ID_REQUIRED });
+    const repo = new VPSRepository(c.env.DB);
+    const service = new VPSService(repo);
+    const result = await service.GetByCategory(req);
+    return c.json(result);
+});
 
 //------------------------------------------------------------ GENERAL ------------------------------------------------------------
 
