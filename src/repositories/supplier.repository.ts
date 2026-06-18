@@ -89,6 +89,7 @@ export class SupplierRepository {
       const suppliers = await orm.select().from(SupplierEntity);
       const resData: GetAllRes[] = suppliers.map(x => ({
         Name: x.Name,
+        Phone: x.Phone,
         Email: x.Email,
         Logo: x.Logo,
         Location :x.Location,
