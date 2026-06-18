@@ -70,6 +70,7 @@ export class SupplierRepository {
     try {
       const results = await orm.select({
         Email: SupplierEntity.Email,
+        Logo: SupplierEntity.Logo,
         Name: SupplierEntity.Name,
         Location : SupplierEntity.Location,
       }).from(SupplierEntity).where(eq(SupplierEntity.Status, SupplierStatus.Enable));
