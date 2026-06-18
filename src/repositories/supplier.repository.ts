@@ -1,7 +1,7 @@
 import { drizzle } from 'drizzle-orm/d1';
 import { and, eq, InferSelectModel } from 'drizzle-orm';
 import { SupplierEntity } from '../entities/suppier.entity';
-import { CreateReq, GetAllRes, GetByStatusRes, SelectSupplierEmailPassRes, SupplierEditPassReq, SupplierLoginReq, SupplierRes, UpdatePassSupplierByEmailPhoneReq, UpdatePassSupplierByEmailPhoneRes, UpdateReq } from '../dtos/supplier.dto';
+import { CreateReq, GetAllRes, GetByStatusRes, SelectSupplierEmailPassRes, SupplierDeleteReq, SupplierEditPassReq, SupplierLoginReq, SupplierRes, UpdatePassSupplierByEmailPhoneReq, UpdatePassSupplierByEmailPhoneRes, UpdateReq } from '../dtos/supplier.dto';
 import { ERRORS, SUCCESS, SUPPLIER } from '../constants/text.constant';
 import bcrypt from 'bcryptjs';
 import { Res, ResData } from '../dtos/res.dto';
@@ -186,6 +186,18 @@ export class SupplierRepository {
       res.Message = ERRORS.ERROR_3000;
       return res;
     }
+  }
+
+  async Delete(req: SupplierDeleteReq): Promise<Res>{
+    const orm = drizzle(this.db);
+    let res = new Res();
+    try{
+      const [supplier] = await orm.select().from(SupplierEntity).where(eq(SupplierEntity.Email, req.Email)).limit(1);
+      if(!supplier) return res;
+      const del = await orm.delete(SupplierEntity).where(eq(SupplierEntity.Email, req.Email));
+      if(del) return { Status: httpCodes.OK, Message: SUCCESS.DELETE };
+      else return { Status: httpCodes.ServiceUnavailable, Message: ERRORS.DELETE };
+    } catch{ return { Status: httpCodes.InternalServerError, Message: ERRORS.INTERNALSERVERERROR }}
   }
 
   private randomString(length: number = 8): string {

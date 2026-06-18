@@ -1,5 +1,5 @@
 import { Hono } from 'hono'
-import { CreateReq, SupplierEditPassReq, SupplierLoginReq, SupplierRes, UpdatePassSupplierByEmailPhoneReq, UpdateReq } from '../dtos/supplier.dto'
+import { CreateReq, SupplierDeleteReq, SupplierEditPassReq, SupplierLoginReq, SupplierRes, UpdatePassSupplierByEmailPhoneReq, UpdateReq } from '../dtos/supplier.dto'
 import { SupplierService } from '../services/supplier.service'
 import {SupplierRepository } from '../repositories/supplier.repository'
 import { Res, ResData } from '../dtos/res.dto'
@@ -69,7 +69,6 @@ SupplierController.post('/admin/create', async (c) => {
     
     return c.json(result);
 });
-
 SupplierController.post('/admin/update', async (c) => {
     let req = null;
     let res = new Res();
@@ -92,6 +91,16 @@ SupplierController.post('/admin/update', async (c) => {
     const service = new SupplierService(repo);
     const result = await service.Update(req);
     
+    return c.json(result);
+});
+SupplierController.post('/admin/remove', async (c) => {
+    let req = null;
+    try { req = await c.req.json<SupplierDeleteReq>() }
+    catch { return c.json({ Status: httpCodes.BadRequest, Message: ERRORS.BADREQUEST }, httpCodes.BadRequest) }
+    if (!req.Email)  return c.json({ Status: httpCodes.BadRequest, Message: SUPPLIER.EMAIL_REQUIRED });
+    const repo = new SupplierRepository(c.env.DB);
+    const service = new SupplierService(repo);
+    const result = await service.Delete(req);
     return c.json(result);
 });
 

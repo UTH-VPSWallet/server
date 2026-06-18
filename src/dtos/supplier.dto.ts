@@ -67,3 +67,7 @@ export interface SupplierRes {
     Location : string;
     Status : number;
 }
+
+export interface SupplierDeleteReq {
+    Email: string;
+}

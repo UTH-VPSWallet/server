@@ -1,5 +1,5 @@
 import { SupplierRepository } from '../repositories/supplier.repository';
-import { CreateReq, GetAllRes, GetByStatusRes, SelectSupplierEmailPassRes, SupplierEditPassReq, SupplierLoginReq, SupplierLoginRes, SupplierRes, UpdatePassSupplierByEmailPhoneReq, UpdatePassSupplierByEmailPhoneRes, UpdateReq} from '../dtos/supplier.dto';
+import { CreateReq, GetAllRes, GetByStatusRes, SelectSupplierEmailPassRes, SupplierDeleteReq, SupplierEditPassReq, SupplierLoginReq, SupplierLoginRes, SupplierRes, UpdatePassSupplierByEmailPhoneReq, UpdatePassSupplierByEmailPhoneRes, UpdateReq} from '../dtos/supplier.dto';
 import { Res, ResData } from '../dtos/res.dto';
 import { generateJWT } from '../utils/jwt.util';
 import { CONSTANTS } from '../constants/text.constant';
@@ -39,6 +39,7 @@ export class  SupplierService {
     async Create(req: CreateReq): Promise<Res> { return await this.repo.Create(req) }
 
     async Update(req: UpdateReq): Promise<Res> { return await this.repo.Update(req) }
+    async Delete(req: SupplierDeleteReq): Promise<Res> { return await this.repo.Delete(req) }
 
     async GetByEmail(req: string): Promise<ResData<SupplierRes>> { return await this.repo.GetByEmail(req) }
 }
