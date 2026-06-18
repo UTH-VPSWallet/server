@@ -142,13 +142,14 @@ export class SupplierRepository {
         res.Message = SUPPLIER.EMAIL_NOT_EXIST;
         return res;
       }
-      await orm.update(SupplierEntity).set({
+      const result = await orm.update(SupplierEntity).set({
         Logo: req.Logo ?? existing.Logo,
         Name: req.Name ?? existing.Name,
         Phone: req.Phone ?? existing.Phone,
         Location : req.Location ?? existing.Location,
         Status: req.Status ?? existing.Status
-      }).where(eq(SupplierEntity.Email, req.Email));
+      }).where(eq(SupplierEntity.Email, req.Email)).returning();
+      if(result.length === 0) return{ Status: httpCodes.ServiceUnavailable, Message: ERRORS.UPDATE };
       return {
         Status: httpCodes.OK,
         Message: SUCCESS.UPDATE,
