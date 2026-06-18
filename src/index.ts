@@ -8,6 +8,7 @@ import { EvaluationController } from "./controllers/evaluation.controller";
 import { CommentController } from "./controllers/comment.controller";
 import { httpCodes } from "./constants/enum.constant";
 import { ERRORS } from "./constants/text.constant";
+import { AdminController } from "./controllers/admin.controller";
 
 const app = new Hono<{ Bindings: CloudflareBindings }>();
 
@@ -21,6 +22,7 @@ app.use('*', cors({
   credentials: false // Nếu cần cookie/token, để true
 }));
 
+app.route('/admin', AdminController);
 app.route('/supplier', SupplierController);
 app.route('/vps', VPSController);
 app.route('/order', OrderController);
