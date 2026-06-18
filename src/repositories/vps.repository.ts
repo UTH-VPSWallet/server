@@ -24,6 +24,7 @@ export class VPSRepository {
                 Storage: VPSEntity.Storage,
                 RAM: VPSEntity.RAM,
                 CPU: VPSEntity.CPU,
+                Category: VPSEntity.Category,
                 Status: VPSEntity.Status
             }).from(VPSEntity).where(eq(VPSEntity.Email, req.Email));
             return {
@@ -44,6 +45,7 @@ export class VPSRepository {
                 Storage: VPSEntity.Storage,
                 RAM: VPSEntity.RAM,
                 CPU: VPSEntity.CPU,
+                Category: VPSEntity.Category,
                 Supplier: {
                     Email: SupplierEntity.Email,
                     Name: SupplierEntity.Name,
@@ -78,6 +80,7 @@ export class VPSRepository {
                 RAM: VPSEntity.RAM,
                 CPU: VPSEntity.CPU,
                 Status: VPSEntity.Status,
+                Category: VPSEntity.Category,
                 Supplier: {
                     Email: SupplierEntity.Email,
                     Name: SupplierEntity.Name,
@@ -113,6 +116,7 @@ export class VPSRepository {
             RAM: req.RAM,
             Storage: req.Storage,
             PricePerMonth: req.PricePerMonth,
+            Category: req.Category,
             Status: req.Status,
             Email: req.Email,
         }).returning({ ID: VPSEntity.ID });
@@ -133,6 +137,7 @@ export class VPSRepository {
                 RAM: req.RAM ?? existing.RAM,
                 Storage: req.Storage ?? existing.Storage,
                 PricePerMonth: req.PricePerMonth ?? existing.PricePerMonth,
+                Category: req.Category ?? existing.Category,
                 Status: req.Status ?? existing.Status
             }).where(eq(VPSEntity.ID, req.ID));
             if(update) return { Status: httpCodes.OK, Message: SUCCESS.UPDATE };

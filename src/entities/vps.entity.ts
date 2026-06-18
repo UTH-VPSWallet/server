@@ -7,6 +7,7 @@ export const VPSEntity = sqliteTable('tbl__VPS', {
     RAM: text("RAM").notNull(),
     Storage: text("Storage").notNull(),
     PricePerMonth: integer("PricePerMonth").notNull(),
+    Category: integer("Category").notNull(),
     Status: integer("Status").notNull(),
     Email: text("Email").notNull()
 });

@@ -12,6 +12,7 @@ export interface GetBySupplierRes {
     RAM :string;
     Storage :string;
     PricePerMonth: number;
+    Category: number;
     Status: number;
 }
 export interface VPSAddReq {
@@ -20,6 +21,7 @@ export interface VPSAddReq {
     RAM :string;
     Storage :string;
     PricePerMonth: number;
+    Category: number;
     Status: number;
     Email: string;
 }
@@ -30,6 +32,7 @@ export interface VPSUpdateReq {
     RAM :string;
     Storage :string;
     PricePerMonth: number;
+    Category: number;
     Status: number;
 }
 export interface VPSDeleteReq { ID: number }
@@ -40,6 +43,7 @@ export interface VPSGetByStatusRes {
     RAM :string;
     Storage :string;
     PricePerMonth: number;
+    Category: number;
     Supplier: {
         Email: string;
         Name: string;
@@ -59,6 +63,7 @@ export interface VPSGetByIDRes {
     Storage :string;
     PricePerMonth: number;
     Status: number;
+    Category: number;
     Supplier: {
         Email: string;
         Name: string;
