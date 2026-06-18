@@ -70,7 +70,7 @@ SupplierController.post('/admin/create', async (c) => {
     return c.json(result);
 });
 
-SupplierController.put('/update', async (c) => {
+SupplierController.put('/admin/update', async (c) => {
     let req = null;
     let res = new Res();
 
