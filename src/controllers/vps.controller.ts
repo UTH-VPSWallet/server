@@ -76,6 +76,10 @@ VPSController.post('/customer/get-by-category', async (c) => {
     return c.json(result);
 });
 
+//------------------------------------------------------------ ADMIN ------------------------------------------------------------
+
+VPSController.get('/admin/get-all', async (c) => withService(c, service => service.GetAll()))
+
 //------------------------------------------------------------ GENERAL ------------------------------------------------------------
 
 VPSController.post('/get-by-id', async (c) => {

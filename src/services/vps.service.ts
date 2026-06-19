@@ -1,5 +1,5 @@
 import { VPSRepository } from '../repositories/vps.repository';
-import { GetBySupplierRes, GetBySupplierReq, VPSAddReq, VPSUpdateReq, VPSDeleteReq, VPSGetByStatusRes, VPSGetByIDReq, VPSGetByIDRes, VPSSelectByCategoryReq } from '../dtos/vps.dto';
+import { GetBySupplierRes, GetBySupplierReq, VPSAddReq, VPSUpdateReq, VPSDeleteReq, VPSGetByStatusRes, VPSGetByIDReq, VPSGetByIDRes, VPSSelectByCategoryReq, VPSGetAllRes } from '../dtos/vps.dto';
 import { Res, ResData } from '../dtos/res.dto';
 
 export class VPSService {
@@ -7,6 +7,8 @@ export class VPSService {
     constructor(private repo: VPSRepository) {}
 
     async GetBySupplier(req: GetBySupplierReq): Promise<ResData<GetBySupplierRes[]>> { return await this.repo.SelectByEmail(req) }
+
+    async GetAll(): Promise<ResData<VPSGetAllRes[]>> { return await this.repo.SelectAll() }
 
     async GetByStatus(): Promise<ResData<VPSGetByStatusRes[]>> { return await this.repo.SelectByStatus() }
 

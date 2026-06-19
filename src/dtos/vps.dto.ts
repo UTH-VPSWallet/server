@@ -36,6 +36,26 @@ export interface VPSUpdateReq {
     Status: number;
 }
 export interface VPSDeleteReq { ID: number }
+export interface VPSGetAllRes {
+    ID: number;
+    Name: string;
+    CPU :string;
+    RAM :string;
+    Storage :string;
+    PricePerMonth: number;
+    Category: number;
+    Supplier: {
+        Email: string;
+        Name: string;
+        Logo: string;
+        Phone: string;
+        Location: string;
+    }
+    Evaluation: {
+        Rate: number;
+        TotalReview: number;
+    }
+}
 export interface VPSGetByStatusRes {
     ID: number;
     Name: string;

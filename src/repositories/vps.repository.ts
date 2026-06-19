@@ -1,7 +1,7 @@
 import { drizzle } from 'drizzle-orm/d1';
 import { and, eq, InferSelectModel, sql } from 'drizzle-orm';
 import { VPSEntity } from '../entities/vps.entity';;
-import { GetBySupplierRes, GetBySupplierReq, VPSAddReq, VPSUpdateReq, VPSDeleteReq, VPSGetByStatusRes, VPSGetByIDRes, VPSGetByIDReq, VPSSelectByCategoryReq } from '../dtos/vps.dto';
+import { GetBySupplierRes, GetBySupplierReq, VPSAddReq, VPSUpdateReq, VPSDeleteReq, VPSGetByStatusRes, VPSGetByIDRes, VPSGetByIDReq, VPSSelectByCategoryReq, VPSGetAllRes } from '../dtos/vps.dto';
 import { ERRORS, SUCCESS } from '../constants/text.constant';
 import { Res, ResData } from '../dtos/res.dto';
 import { httpCodes, VPSStatus } from '../constants/enum.constant';
@@ -33,6 +33,42 @@ export class VPSRepository {
                 Data: results
             };
         }  catch{ return { Status: httpCodes.InternalServerError, Message: ERRORS.INTERNALSERVERERROR, Data: [] }}
+    }
+
+    async SelectAll(): Promise<ResData<VPSGetAllRes[]>> {
+        const orm = drizzle(this.db);
+        try {
+            const results = await orm.select({
+                ID: VPSEntity.ID,
+                Name: VPSEntity.Name,
+                PricePerMonth: VPSEntity.PricePerMonth,
+                Storage: VPSEntity.Storage,
+                RAM: VPSEntity.RAM,
+                CPU: VPSEntity.CPU,
+                Category: VPSEntity.Category,
+                Supplier: {
+                    Email: SupplierEntity.Email,
+                    Name: SupplierEntity.Name,
+                    Logo: SupplierEntity.Logo,
+                    Phone: SupplierEntity.Phone,
+                    Location: SupplierEntity.Location,
+                },
+                Evaluation: {
+                    Rate: sql<number>`COALESCE(CAST(AVG(${EvaluationEntity.Rate}) AS FLOAT), 0)`,
+                    TotalReview: sql<number>`COUNT(${EvaluationEntity.Rate})`
+                }
+            })
+            .from(VPSEntity)
+            .innerJoin(SupplierEntity,eq(VPSEntity.Email, SupplierEntity.Email))
+            .leftJoin(EvaluationEntity, eq(VPSEntity.ID, EvaluationEntity.VPSID))
+            .where(eq(VPSEntity.Status, VPSStatus.Enable))
+            .groupBy(VPSEntity.ID, SupplierEntity.Email);
+            return {
+                Status: httpCodes.OK,
+                Message: SUCCESS.GET,
+                Data: results
+            };
+        } catch{ return { Status: httpCodes.InternalServerError, Message: ERRORS.INTERNALSERVERERROR, Data: [] }}
     }
 
     async SelectByStatus(): Promise<ResData<VPSGetByStatusRes[]>> {
