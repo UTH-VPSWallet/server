@@ -44,17 +44,18 @@ export interface VPSGetAllRes {
     Storage :string;
     PricePerMonth: number;
     Category: number;
+    Status: number;
     Supplier: {
         Email: string;
         Name: string;
         Logo: string;
         Phone: string;
         Location: string;
-    }
+    };
     Evaluation: {
         Rate: number;
         TotalReview: number;
-    }
+    };
 }
 export interface VPSGetByStatusRes {
     ID: number;
