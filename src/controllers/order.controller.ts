@@ -67,6 +67,14 @@ OrderController.post('/customer/cancel', async (c) => {
     return c.json(result);
 });
 
+//------------------------------------------------------------ ADMIN ------------------------------------------------------------
+
+OrderController.get('/admin/get-all', async (c) => {
+    const repo = new OrderRepository(c.env.DB);
+    const service = new OrderService(repo);
+    return c.json(await service.GetAll());
+});
+
 //------------------------------------------------------------ GENERAL ------------------------------------------------------------
 
 OrderController.post('/get-by-id', async (c) => {

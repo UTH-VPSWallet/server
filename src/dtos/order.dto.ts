@@ -1,4 +1,14 @@
 export interface GetOrderBySupplierReq { Email: string }
+
+export interface GetOrderAllRes {
+  ID: number;
+  CustomerName: string;
+  CustomerEmail: string;
+  TotalPrice: number;
+  CreatedAt: number;
+  Status: number;
+  VPS: OrderDetailRes[];
+}
 export interface GetOrderBySupplierRes {
   ID: number;
   CustomerName: string;

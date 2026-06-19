@@ -5,13 +5,63 @@ import { OrderDetailEntity } from '../entities/orderDetail.entity';
 import { VPSEntity } from '../entities/vps.entity';
 import { CustomerEntity } from '../entities/customer.entity';
 import { SupplierEntity } from '../entities/suppier.entity';
-import { GetOrderBySupplierReq, GetOrderBySupplierRes, OrderCreateReq, OrderCreateRes, OrderUpdateStatusReq, GetOrdersByIDRes, GetOrdersByIDReq, GetOrdersByCustomerEmailReq, GetOrdersByCustomerEmailRes, OrderCancelReq } from '../dtos/order.dto';
+import { GetOrderBySupplierReq, GetOrderBySupplierRes, OrderCreateReq, OrderCreateRes, OrderUpdateStatusReq, GetOrdersByIDRes, GetOrdersByIDReq, GetOrdersByCustomerEmailReq, GetOrdersByCustomerEmailRes, OrderCancelReq, GetOrderAllRes } from '../dtos/order.dto';
 import { ERRORS, ORDER, SUCCESS } from '../constants/text.constant';
 import { Res, ResData } from '../dtos/res.dto';
 import { httpCodes, OrderStatus } from '../constants/enum.constant';
 
 export class OrderRepository {
     constructor(private db: D1Database) {}
+
+    async SelectAll(): Promise<ResData<GetOrderAllRes[]>> {
+        const orm = drizzle(this.db);
+        try {
+            const rows = await orm.select({
+                ID: OrderEntity.ID,
+                CustomerName: CustomerEntity.Name,
+                CustomerEmail: CustomerEntity.Email,
+                TotalPrice: OrderEntity.TotalPrice,
+                CreatedAt: OrderEntity.CreatedAt,
+                Status: OrderEntity.Status,
+                OrderDetailID: OrderDetailEntity.ID,
+                VPSID: OrderDetailEntity.VPSID,
+                VPSName: VPSEntity.Name,
+                CPU: VPSEntity.CPU,
+                RAM: VPSEntity.RAM,
+                Storage: VPSEntity.Storage,
+                PricePerMonth: VPSEntity.PricePerMonth,
+                TotalMonth: OrderDetailEntity.TotalMonth,
+                PriceAtPurchase: OrderDetailEntity.PriceAtPurchase
+            })
+            .from(OrderEntity)
+            .innerJoin(OrderDetailEntity, eq(OrderEntity.ID, OrderDetailEntity.OrderID))
+            .innerJoin(VPSEntity, eq(OrderDetailEntity.VPSID, VPSEntity.ID))
+            .innerJoin(CustomerEntity, eq(OrderEntity.CustomerEmail, CustomerEntity.Email));
+
+            // Logic gộp dữ liệu
+            const map = new Map<number, GetOrderBySupplierRes>();
+            rows.forEach(row => {
+                if (!map.has(row.ID)) {
+                    map.set(row.ID, {
+                        ID: row.ID,
+                        CustomerName: row.CustomerName,
+                        TotalPrice: row.TotalPrice,
+                        CustomerEmail: row.CustomerEmail,
+                        CreatedAt: row.CreatedAt, Status: row.Status, VPS: []
+                    });
+                }
+                map.get(row.ID)?.VPS.push({
+                    ID: row.OrderDetailID, VPSID: row.VPSID, Name: row.VPSName, CPU: row.CPU, RAM: row.RAM,
+                    Storage: row.Storage, PricePerMonth: row.PricePerMonth,
+                    TotalMonth: row.TotalMonth, PriceAtPurchase: row.PriceAtPurchase
+                });
+            });
+
+            return { Status: httpCodes.OK, Message: SUCCESS.GET, Data: Array.from(map.values()) };
+        } catch {
+            return { Status: httpCodes.InternalServerError, Message: ERRORS.INTERNALSERVERERROR };
+        }
+    }
 
     async SelectBySupplier(req: GetOrderBySupplierReq): Promise<ResData<GetOrderBySupplierRes[]>> {
         const orm = drizzle(this.db);
