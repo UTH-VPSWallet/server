@@ -20,7 +20,7 @@ CustomerController.post('/login', async (c) =>{
   return withService(c, service => service.Login(req));
 })
 
-CustomerController.post('/change-pass', async (c) =>{
+CustomerController.post('/forgot-pass', async (c) =>{
   let req = null;
   try { req = await c.req.json<ForgotPassReq>() }
   catch { return c.json({ Status: httpCodes.BadRequest, Message: ERRORS.BADREQUEST }, httpCodes.BadRequest) }
@@ -29,7 +29,7 @@ CustomerController.post('/change-pass', async (c) =>{
   return withService(c, service => service.ForgotPass(req));
 })
 
-CustomerController.post('/forgot-pass', async (c) =>{
+CustomerController.post('/change-pass', async (c) =>{
   let req = null;
   try { req = await c.req.json<CustomerEditPassReq>() }
   catch { return c.json({ Status: httpCodes.BadRequest, Message: ERRORS.BADREQUEST }, httpCodes.BadRequest) }
