@@ -83,3 +83,9 @@ export const COMMENT = {
     VPSID_REQUIRED: 'VPSID required',
     CONTENT_REQUIRED: 'Content required'
 }
+export const EMAIL = {
+    SEND_SUSSCESS: 'Send email success',
+    SEND_FAIL: 'Send email fail',
+    REMAINING_QUOTA: 'quota is remain',
+    REMAINING_QUOTA_LESS: 'quota email is less',
+}

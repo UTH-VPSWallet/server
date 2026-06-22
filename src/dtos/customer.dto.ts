@@ -29,3 +29,27 @@ export interface CustomerAddReq {
   Phone: string;
   Name: string;
 }
+
+export interface ForgotPassReq { 
+  Email: string,
+  Phone: string
+}
+
+export interface SelectUserByEmailPhoneReq { 
+  Email: string,
+  Phone: string
+}
+export interface SelectUserByEmailPhoneRes { 
+  Email: string,
+  Name: string
+}
+
+export interface UpdateUserPassReq { 
+  Email: string,
+  Pass: string
+}
+
+export interface UpdateUserPassReq { 
+  Email: string,
+  Pass: string
+}
